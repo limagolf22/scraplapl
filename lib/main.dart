@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:scraplapl/FuelPage.dart';
-import 'package:scraplapl/PerfoPage.dart';
+import 'package:scraplapl/fuel_page.dart';
+import 'package:scraplapl/perfo_page.dart';
 import 'package:scraplapl/scrapping.dart';
 import 'package:scraplapl/tools.dart';
 import 'package:pdf_merger/pdf_merger.dart';
@@ -116,7 +116,7 @@ class MainRoute extends StatelessWidget {
             child: const Text("upload datas"),
             onPressed: () {
               //getPdfNotam(["LFBO", "LFMT"], "2022/07/28", "00:25");
-              // getPdfWeather(depArpt, arrArpt, 40);
+              getPdfWeather(depArpt, arrArpt, 40);
               var date = DateTime.now().toUtc().add(const Duration(minutes: 5));
               getPdfNotam(
                   [depArpt, arrArpt],

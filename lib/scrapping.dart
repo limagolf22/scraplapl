@@ -5,10 +5,10 @@ import 'package:requests/requests.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:scraplapl/FuelPage.dart';
+import 'package:scraplapl/fuel_page.dart';
 import 'package:scraplapl/tools.dart';
 
-import 'PerfoPage.dart';
+import 'perfo_page.dart';
 
 const fuelConso = 25;
 
@@ -31,8 +31,8 @@ getPdfWeather(dep, arr, int fl) async {
         "https://aviation.meteo.fr/dossier_personnalise_show_pdf.php?id_recent_ordre=1&id=${r.content()}&origine=recents";
     var pdfRes = await Requests.get(pdfURL);
     var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-    File file = File("${dir}/" + "MTO_" + dep + "-" + arr + ".pdf");
-    File urlFile = await file.writeAsBytes(pdfRes.bodyBytes);
+    File file = File("${dir}/MTO_$dep-$arr.pdf");
+    await file.writeAsBytes(pdfRes.bodyBytes);
     // pdfRes.bodyBytes
     // pdfFile = open("MTO_"+dep+"-"+arr+".pdf", 'wb')
     // pdfFile.write(pdfRes.content)
@@ -251,32 +251,30 @@ createConsoPDF(List<String> arpts) async {
       pageFormat: PdfPageFormat.a4,
       build: (pw.Context context) {
         return pw.Column(children: [
-          pw.Table(children: [
-            pw.TableRow(
-                children: headersConso.asMap().entries.map((col) {
-                      return addPadding(pw.Text(col.value,
-                          maxLines: 1,
-                          style: pw.TextStyle(
-                              fontWeight: pw.FontWeight.bold, fontSize: 10)));
-                    }).toList() +
-                    [
-                      addPadding(pw.Text("total",
-                          textAlign: pw.TextAlign.center,
-                          maxLines: 1,
-                          style: const pw.TextStyle(
-                              fontSize: 10,
-                              background:
-                                  pw.BoxDecoration(color: PdfColors.yellow))))
-                    ]),
-            pw.TableRow(
-                children: consoContent.map((col) {
-                      return addPadding(pw.Text("${col.toString()} min",
-                          maxLines: 1,
-                          style: const pw.TextStyle(fontSize: 10)));
-                    }).toList() +
-                    [
+          pw.Table(
+              border: pw.TableBorder.all(),
+              children: headersConso
+                      .map((h) => pw.TableRow(children: [
+                            addPadding(pw.Text(
+                              h,
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                            )),
+                            addPadding(pw.Text(
+                              consoContent[h].toString(),
+                              maxLines: 1,
+                              style: pw.TextStyle(fontSize: 10),
+                            ))
+                          ]))
+                      .toList() +
+                  [
+                    pw.TableRow(children: [
                       addPadding(pw.Text(
-                          "${consoContent.reduce((a, b) => (a + b)).toString()} min\n${((consoContent.reduce((a, b) => (a + b)) * fuelConso / 60).floor() + 1).toString()} L",
+                        "total",
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                      )),
+                      addPadding(pw.Text(
+                          "${consoContent.values.reduce((a, b) => (a + b)).toString()} min\n${((consoContent.values.reduce((a, b) => (a + b)) * fuelConso / 60).floor() + 1).toString()} L",
                           textAlign: pw.TextAlign.center,
                           maxLines: 2,
                           style: const pw.TextStyle(
@@ -284,7 +282,7 @@ createConsoPDF(List<String> arpts) async {
                               background:
                                   pw.BoxDecoration(color: PdfColors.yellow))))
                     ])
-          ], border: (pw.TableBorder.all())),
+                  ]),
         ]);
         // Center
       })); // Page

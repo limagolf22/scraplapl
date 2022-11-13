@@ -38,7 +38,7 @@ class PerfoPage extends StatelessWidget {
               if (row == 0) {
                 return TableRow(
                   children: headersPerfo.asMap().entries.map((te) {
-                    return createRow(Text(
+                    return createCell(Text(
                       te.value,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 10),
@@ -48,7 +48,7 @@ class PerfoPage extends StatelessWidget {
               } else {
                 return TableRow(
                     children: headersPerfo.asMap().entries.map((col) {
-                  return createRow(TextField(
+                  return createCell(TextField(
                       style: const TextStyle(fontSize: 10),
                       textAlign: TextAlign.center,
                       keyboardType: col.key == 0
@@ -82,6 +82,6 @@ class PerfoPage extends StatelessWidget {
   }
 }
 
-Widget createRow(Widget el) {
+Widget createCell(Widget el) {
   return Padding(padding: const EdgeInsets.all(2.0), child: el);
 }

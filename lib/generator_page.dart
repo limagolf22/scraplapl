@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:scraplapl/FuelPage.dart';
-import 'package:scraplapl/PerfoPage.dart';
+import 'package:scraplapl/fuel_page.dart';
+import 'package:scraplapl/perfo_page.dart';
 
 class generatorPage extends StatelessWidget {
   const generatorPage({super.key});
