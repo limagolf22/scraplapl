@@ -18,7 +18,10 @@ getPdfWeather(dep, arr, int fl) async {
   String loginURL = 'https://aviation.meteo.fr/ajax/login_valid.php';
   String getURL =
       "https://aviation.meteo.fr/recents_add.php?depart=$dep&arrivee=$arr&etapes=&fly_level=${fl.toString()}&domaine=FRANCE&tcatcag=&vaavag=";
-  var s = await Requests.post(loginURL, body: {});
+  var s = await Requests.post(loginURL, body: {
+    "login": "guigoliam",
+    "password": "abe8ae729f800bf87f2ee0623d0d6dc8"
+  });
   s.raiseForStatus();
 
   var r = await Requests.get(getURL);
@@ -34,10 +37,13 @@ getPdfWeather(dep, arr, int fl) async {
     // pdfFile = open("MTO_"+dep+"-"+arr+".pdf", 'wb')
     // pdfFile.write(pdfRes.content)
     // pdfFile.close()
+  } else {
+    print("MTO pdf failed to be captures");
   }
 }
 
-getPdfNotam(List<String> arpts, String date, String heure) async {
+Future<String> getPdfNotam(
+    List<String> arpts, String date, String heure) async {
   // var response = await Requests.get(
   //   'http://notamweb.aviation-civile.gouv.fr/Script/IHM/Com_ChargementRessource.php',
   // );
@@ -104,12 +110,15 @@ getPdfNotam(List<String> arpts, String date, String heure) async {
   //           "Accept-Encoding": "gzip, deflate"
   //         },
   //         verify: false);
-
+  var resinit = await http.get(Uri.parse(
+      'https://notamweb.aviation-civile.gouv.fr/Script/IHM/Bul_Aerodrome.php?AERO_Langue=FR'));
   http.Request request = http.Request(
       'POST',
       Uri.parse(
           'https://notamweb.aviation-civile.gouv.fr/Script/IHM/Bul_Aerodrome.php?AERO_Langue=FR'));
-  request.bodyFields = map;
+  request.bodyFields = map; // map;
+  var myCookie = resinit.headers['set-cookie']!;
+  request.headers['Cookie'] = myCookie.split(';')[0];
   request.headers['content-type'] = 'application/x-www-form-urlencoded';
   request.headers['accept'] = '*/*';
   request.headers['Accept-Encoding'] = "gzip, deflate";
@@ -121,7 +130,7 @@ getPdfNotam(List<String> arpts, String date, String heure) async {
   //response1.raiseForStatus();
 
   // final http.Response response = await http.post(
-  //   Uri.parse(
+  //   Uri.parse(0
   //       'http://notamweb.aviation-civile.gouv.fr/Script/IHM/Bul_Aerodrome.php?AERO_Langue=FR'),
   //   headers: <String, String>{
   //     "Connection": "keep-alive",
@@ -136,16 +145,20 @@ getPdfNotam(List<String> arpts, String date, String heure) async {
   String pdfId = findBetween(respStr, "../../", ".pdf");
   if (pdfId != "") {
     print("NOTAM pdf captured");
-    String pdfURL = "https://notamweb.aviation-civile.gouv.fr/$pdfId.pdf";
-    var pdfRes = await Requests.get(pdfURL);
-    var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-    File file = File("$dir/Notam_${arpts[0]}-${arpts[1]}.pdf");
-    await file.writeAsBytes(pdfRes.bodyBytes);
+    await saveNotamFile(pdfId, arpts);
   } else {
     print("failed to get pdf for Notam");
   }
-
+  return pdfId;
   //print(findBetween(response1.content(), "../../", ".pdf"));
+}
+
+saveNotamFile(String pdfId, List<String> arpts) async {
+  String pdfURL = "https://notamweb.aviation-civile.gouv.fr/$pdfId.pdf";
+  var pdfRes = await Requests.get(pdfURL);
+  var dir = await AppUtil.createFolderInAppDocDir('pdfs');
+  File file = File("$dir/Notam_${arpts[0]}-${arpts[1]}.pdf");
+  await file.writeAsBytes(pdfRes.bodyBytes);
 }
 
 findBetween(String str, String before, String after) {

@@ -15,7 +15,7 @@ const headersPerfo = [
   "LDA"
 ];
 
-var perfoContent = new List<List<String>>.generate(
+var perfoContent = List<List<String>>.generate(
     4, (int index) => ["", "", "", "", "", "", "", "", "", ""]);
 
 class PerfoPage extends StatelessWidget {
@@ -73,6 +73,8 @@ class PerfoPage extends StatelessWidget {
                     }
                   },
                   child: const Text("Valider"))),
+          Image.asset('assets/images/TO-DR400.png'),
+          Image.asset('assets/images/LD-DR400.png'),
           Image.asset('assets/images/perfoTab.png')
         ],
       ))),

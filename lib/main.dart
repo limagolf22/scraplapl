@@ -6,7 +6,17 @@ import 'package:scraplapl/tools.dart';
 import 'package:pdf_merger/pdf_merger.dart';
 import 'dart:io';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MaterialApp(
     title: 'Nav Preparation',
     home: MainRoute(),
@@ -106,7 +116,7 @@ class MainRoute extends StatelessWidget {
             child: const Text("upload datas"),
             onPressed: () {
               //getPdfNotam(["LFBO", "LFMT"], "2022/07/28", "00:25");
-              getPdfWeather(depArpt, arrArpt, 40);
+              // getPdfWeather(depArpt, arrArpt, 40);
               var date = DateTime.now().toUtc().add(const Duration(minutes: 5));
               getPdfNotam(
                   [depArpt, arrArpt],
