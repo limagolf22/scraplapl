@@ -64,54 +64,38 @@ class MainRoute extends StatelessWidget {
         ),
         body:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          Row(children: [
-            const Text("DEP :           "),
-            Expanded(
-              child: TextField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    depArpt = value;
-                  },
-                  controller: TextEditingController()..text = depArpt),
-            )
-          ]),
-          Row(children: [
-            const Text("ARR :           "),
-            Expanded(
-              child: TextField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    arrArpt = value;
-                  },
-                  controller: TextEditingController()..text = arrArpt),
-            )
-          ]),
-          Row(children: [
-            const Text("Rerouting1 : "),
-            Expanded(
-              child: TextField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    rerouting1 = value;
-                  },
-                  controller: TextEditingController()..text = rerouting1),
-            )
-          ]),
-          Row(children: [
-            const Text("Rerouting2 : "),
-            Expanded(
-              child: TextField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    rerouting2 = value;
-                  },
-                  controller: TextEditingController()..text = rerouting2),
-            )
-          ]),
+          TextFormField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.text,
+              onChanged: (value) {
+                depArpt = value;
+              },
+              controller: TextEditingController()..text = depArpt,
+              decoration: const InputDecoration(labelText: "DEPARTURE")),
+          TextFormField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.text,
+              onChanged: (value) {
+                arrArpt = value;
+              },
+              controller: TextEditingController()..text = arrArpt,
+              decoration: const InputDecoration(labelText: "ARRIVAL")),
+          TextFormField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.text,
+              onChanged: (value) {
+                rerouting1 = value;
+              },
+              controller: TextEditingController()..text = rerouting1,
+              decoration: const InputDecoration(labelText: "Rerouting1")),
+          TextFormField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.text,
+              onChanged: (value) {
+                rerouting2 = value;
+              },
+              controller: TextEditingController()..text = rerouting2,
+              decoration: const InputDecoration(labelText: "Rerouting1")),
           TextButton(
             child: const Text("upload datas"),
             onPressed: () {
