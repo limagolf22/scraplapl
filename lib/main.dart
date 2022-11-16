@@ -97,7 +97,7 @@ class MainRoute extends StatelessWidget {
               controller: TextEditingController()..text = rerouting2,
               decoration: const InputDecoration(labelText: "Rerouting1")),
           TextButton(
-            child: const Text("upload datas"),
+            child: const Text("upload datas (Notam+Weather)"),
             onPressed: () {
               //getPdfNotam(["LFBO", "LFMT"], "2022/07/28", "00:25");
               getPdfWeather(depArpt, arrArpt, 40);

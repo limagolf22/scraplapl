@@ -179,40 +179,57 @@ createPerfoPDF(List<String> arpts) async {
       build: (pw.Context context) {
         return pw.Column(children: [
           pw.Table(
-              children: [0, 1, 2, 3, 4].map((row) {
-                if (row == 0) {
-                  return pw.TableRow(
-                    children: headersPerfo.asMap().entries.map((col) {
-                          return addPadding(pw.Text(
-                            col.value,
-                            style: pw.TextStyle(
-                                fontWeight: pw.FontWeight.bold,
-                                background: pw.BoxDecoration(
-                                    color: getBackColor(col.key))),
-                          ));
-                        }).toList() +
-                        [
-                          addPadding(pw.Text(
-                            "check",
-                            textAlign: pw.TextAlign.center,
-                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                          ))
-                        ],
-                  );
-                } else {
-                  return pw.TableRow(
-                      children: headersPerfo.asMap().entries.map((col) {
+              children: [
+                    pw.TableRow(
+                      children: (["OACI"] +
+                                  headerPerfsInputs +
+                                  headerPerfsOutputs)
+                              .map((col) {
                             return addPadding(pw.Text(
-                                perfoContent[row - 1][col.key],
-                                textAlign: pw.TextAlign.center,
-                                maxLines: 1,
-                                style: pw.TextStyle(
-                                    background: pw.BoxDecoration(
-                                        color: getBackColor(col.key)))));
+                              col,
+                              style: pw.TextStyle(
+                                  fontWeight: pw.FontWeight.bold,
+                                  background: pw.BoxDecoration(
+                                      color: getBackColor(col))),
+                            ));
                           }).toList() +
-                          [addPadding(pw.Text('V'))]);
-                }
-              }).toList(),
+                          [
+                            addPadding(pw.Text(
+                              "check",
+                              textAlign: pw.TextAlign.center,
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                            ))
+                          ],
+                    )
+                  ] +
+                  [0, 1, 2, 3].map((row) {
+                    return pw.TableRow(
+                        children: [addPadding(pw.Text(airportsPerfs[row]))] +
+                            headerPerfsInputs.map((col) {
+                              return addPadding(pw.Text(
+                                  perfsInputs[row][col].toString(),
+                                  textAlign: pw.TextAlign.center,
+                                  maxLines: 1,
+                                  style: pw.TextStyle(
+                                      background: pw.BoxDecoration(
+                                          color: PdfColors.white))));
+                            }).toList() +
+                            headerPerfsOutputs.map((col) {
+                              return addPadding(pw.Text(
+                                  perfsResults[row][col].toString(),
+                                  textAlign: pw.TextAlign.center,
+                                  maxLines: 1,
+                                  style: pw.TextStyle(
+                                      background: pw.BoxDecoration(
+                                          color: getBackColor(col)))));
+                            }).toList() +
+                            [
+                              addPadding(airportsPerfs[row] != ""
+                                  ? pw.Text("V")
+                                  : pw.Text(""))
+                            ]);
+                  }).toList(),
               border: (pw.TableBorder.all())),
           addPadding(pw.Image(pw.MemoryImage(
             File('assets/images/perfoTab.png').readAsBytesSync(),
@@ -229,15 +246,15 @@ pw.Widget addPadding(pw.Widget el) {
   return pw.Padding(padding: const pw.EdgeInsets.all(4.0), child: el);
 }
 
-PdfColor getBackColor(int col) {
+PdfColor getBackColor(String col) {
   switch (col) {
-    case 5:
+    case "TOD":
       return PdfColors.blue100;
-    case 6:
+    case "TODA":
       return PdfColors.cyan100;
-    case 7:
+    case "LD":
       return PdfColors.green100;
-    case 8:
+    case "LDA":
       return PdfColors.lightGreen100;
     default:
       return PdfColors.white;

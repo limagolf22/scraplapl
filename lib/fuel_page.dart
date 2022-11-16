@@ -28,15 +28,7 @@ class FuelPage extends StatefulWidget {
 }
 
 class _FuelPageState extends State<FuelPage> {
-  int totalFuel = 0;
-  @override
-  void initState() {
-    super.initState();
-    for (String h in headersConso) {
-      consoContent[h] = 0;
-    }
-  }
-
+  int totalFuel = consoContent.values.reduce((int a, int b)=>a+b);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,10 +52,13 @@ class _FuelPageState extends State<FuelPage> {
                                 ConstrainedBox(
                                     constraints:
                                         const BoxConstraints(minWidth: 60),
-                                    child: createCell(TextField(
+                                    child: createCell(TextFormField(
                                         style: const TextStyle(fontSize: 10),
                                         textAlign: TextAlign.center,
                                         keyboardType: TextInputType.number,
+                                        controller: TextEditingController()
+                                          ..text = consoContent[h].toString()
+                                          ..selection = TextSelection.collapsed(offset: consoContent[h].toString().length),
                                         onChanged: (value) {
                                           try {
                                             consoContent[h] = value == ""
