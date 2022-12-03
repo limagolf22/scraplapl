@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
 import 'dart:io';
+import 'dart:math';
 import 'package:requests/requests.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/pdf.dart';
@@ -306,4 +307,71 @@ createConsoPDF(List<String> arpts) async {
   var dir = await AppUtil.createFolderInAppDocDir('pdfs');
   final file = File("$dir/Conso_${arpts[0]}-${arpts[1]}.pdf");
   await file.writeAsBytes(await pdf.save());
+}
+
+getNotamSofia(List<String> airports, String date, String heure) async {
+  http.Response res1 = await http.get(Uri.parse('https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/homepage.html'));
+  String? JSId = res1.headers['set-cookie']?.split(';')[0];
+
+  Map<String,String> headers2 = {
+    'Accept': 'application/json, text/javascript, */*; q=0.01',
+    'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+    'Connection': 'keep-alive',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Cookie': JSId!,
+    'Origin': 'https://sofia-briefing.aviation-civile.gouv.fr',
+    'Referer': 'https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/notamform.html',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+    'X-Requested-With': 'XMLHttpRequest',
+    'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'Accept-Encoding': 'gzip',
+  };
+  String data = ':operation=postNarrowRoutePibRequest&valid_from=${date.replaceAll('/', '-')}T${heure}:07Z&duration=1200&traffic=VI&fl_lower=0&fl_upper=999&width=15&radiusAD=30&route[]=${airports[0]}&route[]=${airports[1]}&uuid=780fdd10-268d-4f2a-8b40-b75abef431de780fdd10-268d-4f2a-8b40-b75abef431de&isFromSofia=true&operation=postNarrowRoutePibRequest&target=#aside-target&href=/sofia/pages/notamroute.html&typeVol=N&departure_date=${date.split('/').reversed.join('-')}&departure_time=${heure.replaceAll(':', '')}&lang=fr&routeVal=false';
+  Uri url = Uri.parse('https://sofia-briefing.aviation-civile.gouv.fr/sofia');
+
+  http.Response res2 = await http.post(url, headers: headers2, body: data);
+
+  RegExp reg1 = new RegExp(r'(?<="id\\":\\")\d+(?=\\")');
+
+  Iterable<RegExpMatch> allMatches = reg1.allMatches(res2.body);
+
+  List<String> idList = allMatches.map((e) => e.group(0)!).toList();
+
+  Map<String,String> headersPdf = {
+    'Accept': '*/*',
+    'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+    'Connection': 'keep-alive',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Cookie': JSId,
+    'Origin': 'https://sofia-briefing.aviation-civile.gouv.fr',
+    'Referer': 'https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/notamroute.html',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+    'X-Requested-With': 'XMLHttpRequest',
+    'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'Accept-Encoding': 'gzip',
+  };
+
+  String dataPdf = idList.map((e) => "selected[]=$e&").join()+'adep=${airports[0]}&ades=${airports[1]}&radius=30&corridor=15&fl_lower=0&fl_upper=999&title=prepa_roadnotam&duration=1200&validFrom=${date.replaceAll('/', '-')}T${heure}:07Z&uuid=780fdd10-268d-4f2a-8b40-b75abef431de780fdd10-268d-4f2a-8b40-b75abef431de&isFromSofia=true&:operation=NarrowRoutePibPdf';
+  Uri urlPdf = Uri.parse('https://sofia-briefing.aviation-civile.gouv.fr/content/sofia/NarrowRoutePibPdf');
+  http.Response resPdf = await http.post(urlPdf, headers: headersPdf, body: dataPdf);
+  if(resPdf.success) {
+    String dir = await AppUtil.createFolderInAppDocDir('pdfs');
+    File file = File("$dir/NotamSofia_${airports[0]}-${airports[1]}.pdf");
+    await file.writeAsBytes(resPdf.bodyBytes);
+    print("Notam Sofia Pdf written");
+  }
+  else {
+    print("Failed to get Notam Sofia");
+  }
+
 }
