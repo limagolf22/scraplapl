@@ -17,7 +17,6 @@ const headersConso = [
 var consoContentold = List<int>.generate(headersConso.length, (index) => 0);
 var consoContent = {for (var k in headersConso) k: 0};
 
-//TODO : add persistency
 class FuelPage extends StatefulWidget {
   const FuelPage({super.key});
 

@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
 import 'dart:io';
-import 'dart:math';
 import 'package:requests/requests.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/pdf.dart';
@@ -13,7 +12,7 @@ import 'perfo_page.dart';
 
 const fuelConso = 25;
 
-getPdfWeather(dep, arr, int fl) async {
+Future<int> getPdfWeather(dep, arr, int fl) async {
   //FlutterSession session = FlutterSession();
   // HttpSession session = HttpSession();
   String loginURL = 'https://aviation.meteo.fr/ajax/login_valid.php';
@@ -38,11 +37,14 @@ getPdfWeather(dep, arr, int fl) async {
     // pdfFile = open("MTO_"+dep+"-"+arr+".pdf", 'wb')
     // pdfFile.write(pdfRes.content)
     // pdfFile.close()
+    return 0;
   } else {
-    print("MTO pdf failed to be captures");
+    print("MTO pdf failed to be captured");
+    return 1;
   }
 }
 
+@Deprecated('Worked with the old notamWeb website')
 Future<String> getPdfNotam(
     List<String> arpts, String date, String heure) async {
   // var response = await Requests.get(
@@ -309,7 +311,7 @@ createConsoPDF(List<String> arpts) async {
   await file.writeAsBytes(await pdf.save());
 }
 
-getNotamSofia(List<String> airports, String date, String heure) async {
+Future<int> getPdfNotamSofia(List<String> airports, String date, String heure) async {
   http.Response res1 = await http.get(Uri.parse('https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/homepage.html'));
   String? JSId = res1.headers['set-cookie']?.split(';')[0];
 
@@ -369,9 +371,11 @@ getNotamSofia(List<String> airports, String date, String heure) async {
     File file = File("$dir/NotamSofia_${airports[0]}-${airports[1]}.pdf");
     await file.writeAsBytes(resPdf.bodyBytes);
     print("Notam Sofia Pdf written");
+    return 0;
   }
   else {
     print("Failed to get Notam Sofia");
+    return 1;
   }
 
 }
