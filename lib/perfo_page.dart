@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scraplapl/ResizableImage.dart';
 import 'package:scraplapl/scrapping.dart';
 
 import 'main.dart';
@@ -145,9 +146,9 @@ Widget perfoFormWidget(int i) {
             }
           },
           child: const Text("Valider"))),
-    i==0?Image.asset('assets/images/TO-DR400.png'):
-    Image.asset('assets/images/LD-DR400.png'),
-    Image.asset('assets/images/perfoTab.png')]));
+    ResizableImage(imgPath: "TO-$chosenAircraft"),
+        ResizableImage(imgPath: "LD-$chosenAircraft"),
+    Image.asset('assets/images/perfoTab-$chosenAircraft.png')]));
 }
 
 Widget createCell(Widget el) {
@@ -199,8 +200,8 @@ Widget createCell(Widget el) {
                     }
                   },
                   child: const Text("Valider"))),
-          Image.asset('assets/images/TO-DR400.png'),
+          Image.asset('assets/images/TO-DR400-120.png'),
           Image.asset('assets/images/LD-DR400.png'),
-          Image.asset('assets/images/perfoTab.png')
+          Image.asset('assets/images/perfoTab-DR400-120.png')
         ],
       ))),*/

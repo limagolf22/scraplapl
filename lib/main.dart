@@ -29,6 +29,8 @@ String arrArpt = "";
 String rerouting1 = "";
 String rerouting2 = "";
 
+String chosenAircraft = "DR400-120";
+
 class MainRoute extends StatefulWidget {
   const MainRoute({super.key});
 
@@ -45,7 +47,7 @@ class _MainRouteState extends State<MainRoute> {
     //AppUtil.getDir();
     return Scaffold(
         appBar: AppBar(
-          title: Text('MainPage '+Directory.current.toString()),
+          title: Text('MainPage ' + Directory.current.toString()),
           actions: <Widget>[
             IconButton(
               color: const Color.fromARGB(255, 255, 255, 255),
@@ -78,7 +80,8 @@ class _MainRouteState extends State<MainRoute> {
               keyboardType: TextInputType.text,
               onChanged: (value) {
                 depArpt = value;
-                if(scrappingStatus!=RequestStatus.UNDONE || mergeStatus!=RequestStatus.UNDONE){
+                if (scrappingStatus != RequestStatus.UNDONE ||
+                    mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
                     scrappingStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
@@ -92,7 +95,8 @@ class _MainRouteState extends State<MainRoute> {
               keyboardType: TextInputType.text,
               onChanged: (value) {
                 arrArpt = value;
-                if(scrappingStatus!=RequestStatus.UNDONE || mergeStatus!=RequestStatus.UNDONE){
+                if (scrappingStatus != RequestStatus.UNDONE ||
+                    mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
                     scrappingStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
@@ -106,7 +110,8 @@ class _MainRouteState extends State<MainRoute> {
               keyboardType: TextInputType.text,
               onChanged: (value) {
                 rerouting1 = value;
-                if(scrappingStatus!=RequestStatus.UNDONE || mergeStatus!=RequestStatus.UNDONE){
+                if (scrappingStatus != RequestStatus.UNDONE ||
+                    mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
                     scrappingStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
@@ -120,50 +125,85 @@ class _MainRouteState extends State<MainRoute> {
               keyboardType: TextInputType.text,
               onChanged: (value) {
                 rerouting2 = value;
-                if(scrappingStatus!=RequestStatus.UNDONE || mergeStatus!=RequestStatus.UNDONE){
+                if (scrappingStatus != RequestStatus.UNDONE ||
+                    mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
                     scrappingStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
                   });
                 }
-
               },
               controller: TextEditingController()..text = rerouting2,
               decoration: const InputDecoration(labelText: "Rerouting2")),
-              Row(mainAxisAlignment: MainAxisAlignment.center,children:[TextButton(
-            child: const Text("upload datas (Notam+Weather)"),
-            onPressed: () async {
-              var date = DateTime.now().toUtc().add(const Duration(minutes: 5));
-
-              Future<int> exitCodeNotam = getPdfNotamSofia([depArpt, arrArpt],"${date.year}/${add0(date.month)}/${add0(date.day)}",
-                  "${add0(date.hour)}:${add0(date.minute)}");
-
-              Future<int> exitCodeWeather = getPdfWeather(depArpt, arrArpt, 40);
-              int mergeRes = (await Future.wait([exitCodeNotam,exitCodeWeather])).reduce((a, b) => a+b);
+          DropdownButton<String>(
+            value: chosenAircraft,
+            icon: const Icon(Icons.arrow_downward),
+            elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
+            underline: Container(
+              height: 2,
+              color: Colors.deepPurpleAccent,
+            ),
+            onChanged: (String? value) {
+              // This is called when the user selects an item.
               setState(() {
-                scrappingStatus = mergeRes==0?RequestStatus.SUCCESS:RequestStatus.FAIL;
+                chosenAircraft = value!;
               });
             },
-          ),iconRequestStatus(scrappingStatus) ]),
-          Row(mainAxisAlignment: MainAxisAlignment.center,children:[TextButton(
-              child: const Text("merge pdf"),
+            items: ["DR400-120", "DR400-140B"]
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            TextButton(
+              child: const Text("upload datas (Notam+Weather)"),
               onPressed: () async {
-                var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-                print(dir);
-                List<String> selectedPDFs = [];
-                for (var p in [
-                  "$dir/MTO_$depArpt-$arrArpt.pdf",
-                  "$dir/NotamSofia_$depArpt-$arrArpt.pdf",
-                  "$dir/Conso_$depArpt-$arrArpt.pdf",
-                  "$dir/Perfo_$depArpt-$arrArpt.pdf"
-                ]) {
-                  if (await File(p).exists()) {
-                    print("path exists : " + p);
-                    selectedPDFs.add(p);
+                var date =
+                    DateTime.now().toUtc().add(const Duration(minutes: 5));
+
+                Future<int> exitCodeNotam = getPdfNotamSofia(
+                    [depArpt, arrArpt],
+                    "${date.year}/${add0(date.month)}/${add0(date.day)}",
+                    "${add0(date.hour)}:${add0(date.minute)}");
+
+                Future<int> exitCodeWeather =
+                    getPdfWeather(depArpt, arrArpt, 40);
+                int mergeRes =
+                    (await Future.wait([exitCodeNotam, exitCodeWeather]))
+                        .reduce((a, b) => a + b);
+                setState(() {
+                  scrappingStatus = mergeRes == 0
+                      ? RequestStatus.SUCCESS
+                      : RequestStatus.FAIL;
+                });
+              },
+            ),
+            iconRequestStatus(scrappingStatus)
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            TextButton(
+                child: const Text("merge pdf"),
+                onPressed: () async {
+                  var dir = await AppUtil.createFolderInAppDocDir('pdfs');
+                  print(dir);
+                  List<String> selectedPDFs = [];
+                  for (var p in [
+                    "$dir/MTO_$depArpt-$arrArpt.pdf",
+                    "$dir/NotamSofia_$depArpt-$arrArpt.pdf",
+                    "$dir/Conso_$depArpt-$arrArpt.pdf",
+                    "$dir/Perfo_$depArpt-$arrArpt.pdf"
+                  ]) {
+                    if (await File(p).exists()) {
+                      print("path exists : " + p);
+                      selectedPDFs.add(p);
+                    }
+                    ;
                   }
-                  ;
-                }
-        /*        MergeMultiplePDFResponse response =
+                  /*        MergeMultiplePDFResponse response =
                     await PdfMerger.mergeMultiplePDF(
                         paths: selectedPDFs,
                         outputDirPath:
@@ -171,13 +211,23 @@ class _MainRouteState extends State<MainRoute> {
 
                 print(response.status);
 */
-                ProcessRunner processRunner = ProcessRunner();
-                ProcessRunnerResult result = await processRunner.runProcess(['./pdftk/pdftk.exe']+selectedPDFs+[ 'cat', 'output', 'Merged_$depArpt-$arrArpt.pdf'],runInShell: false);
-                print(result.exitCode==0?"merge is done succesfully":"failed to merge");
-                setState(() {
-                  mergeStatus = result.exitCode==0?RequestStatus.SUCCESS:RequestStatus.FAIL;
-                });
-              }),iconRequestStatus(mergeStatus)])
+                  ProcessRunner processRunner = ProcessRunner();
+                  ProcessRunnerResult result = await processRunner.runProcess(
+                      ['./pdftk/pdftk.exe'] +
+                          selectedPDFs +
+                          ['cat', 'output', 'Merged_$depArpt-$arrArpt.pdf'],
+                      runInShell: false);
+                  print(result.exitCode == 0
+                      ? "merge is done succesfully"
+                      : "failed to merge");
+                  setState(() {
+                    mergeStatus = result.exitCode == 0
+                        ? RequestStatus.SUCCESS
+                        : RequestStatus.FAIL;
+                  });
+                }),
+            iconRequestStatus(mergeStatus)
+          ])
         ]));
   }
 }
@@ -186,16 +236,15 @@ String add0(int num) {
   return num < 10 ? "0$num" : num.toString();
 }
 
-Icon iconRequestStatus(RequestStatus reqStatus){
-  switch(reqStatus){
+Icon iconRequestStatus(RequestStatus reqStatus) {
+  switch (reqStatus) {
     case RequestStatus.UNDONE:
-      return Icon(Icons.change_circle_outlined,color: Colors.transparent);
+      return Icon(Icons.change_circle_outlined, color: Colors.transparent);
     case RequestStatus.SUCCESS:
-      return Icon(Icons.check_rounded,color: Colors.green);
+      return Icon(Icons.check_rounded, color: Colors.green);
     case RequestStatus.FAIL:
-      return Icon(Icons.error_outline,color: Colors.red);
+      return Icon(Icons.error_outline, color: Colors.red);
     default:
-      return Icon(Icons.change_circle_outlined,color: Colors.transparent);
+      return Icon(Icons.change_circle_outlined, color: Colors.transparent);
   }
-
 }

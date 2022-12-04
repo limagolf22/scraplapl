@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:scraplapl/fuel_page.dart';
+import 'package:scraplapl/main.dart';
 import 'package:scraplapl/tools.dart';
 
 import 'perfo_page.dart';
@@ -235,7 +236,7 @@ createPerfoPDF(List<String> arpts) async {
                   }).toList(),
               border: (pw.TableBorder.all())),
           addPadding(pw.Image(pw.MemoryImage(
-            File('assets/images/perfoTab.png').readAsBytesSync(),
+            File('assets/images/perfoTab-$chosenAircraft.png').readAsBytesSync(),
           )))
         ]);
         // Center
