@@ -28,6 +28,11 @@ class AppUtil {
     extDir = directory!.path;
     print("External storage dir : " + extDir);
   }
+  
+  static bool isICAO(String arpt){
+    return RegExp(r"^[A-Z]{4}$").hasMatch(arpt);
+  }
+  
 }
 
 extension extString on String {

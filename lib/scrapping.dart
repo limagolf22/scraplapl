@@ -311,8 +311,8 @@ createConsoPDF(List<String> arpts) async {
   final file = File("$dir/Conso_${arpts[0]}-${arpts[1]}.pdf");
   await file.writeAsBytes(await pdf.save());
 }
-
-Future<int> getPdfNotamSofia(List<String> airports, String date, String heure) async {
+@Deprecated("used only to find Notams between 2 points")
+Future<int> getPdfNotamSofiaRoute(List<String> airports, String date, String heure) async {
   http.Response res1 = await http.get(Uri.parse('https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/homepage.html'));
   String? JSId = res1.headers['set-cookie']?.split(';')[0];
 

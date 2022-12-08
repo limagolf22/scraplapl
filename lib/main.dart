@@ -4,6 +4,7 @@ import 'package:scraplapl/RequestStatus.dart';
 import 'package:scraplapl/fuel_page.dart';
 import 'package:scraplapl/perfo_page.dart';
 import 'package:scraplapl/scrapping.dart';
+import 'package:scraplapl/scrapping_Notam.dart';
 import 'package:scraplapl/tools.dart';
 import 'dart:io';
 
@@ -166,7 +167,7 @@ class _MainRouteState extends State<MainRoute> {
                     DateTime.now().toUtc().add(const Duration(minutes: 5));
 
                 Future<int> exitCodeNotam = getPdfNotamSofia(
-                    [depArpt, arrArpt],
+                    [depArpt, arrArpt,rerouting1,rerouting2].where((arpt) => AppUtil.isICAO(arpt)).toList(),
                     "${date.year}/${add0(date.month)}/${add0(date.day)}",
                     "${add0(date.hour)}:${add0(date.minute)}");
 
