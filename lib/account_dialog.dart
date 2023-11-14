@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:logger/logger.dart';
+import 'package:scraplapl/tools.dart';
+
+import 'main.dart';
 
 void open_login_dialog(BuildContext context) {
+  Logger logger_dialog = Logger();
+  String internal_login = personalFolder;
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -14,11 +19,15 @@ void open_login_dialog(BuildContext context) {
             child: Column(
               children: [
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Name",
-                    icon: Icon(Icons.account_box),
-                  ),
-                ),
+                    validator: validateName,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: const InputDecoration(
+                      labelText: "Name",
+                      icon: Icon(Icons.account_box),
+                    ),
+                    onChanged: (value) {
+                      internal_login = value;
+                    }),
               ],
             ),
           ),
@@ -27,11 +36,19 @@ void open_login_dialog(BuildContext context) {
           ElevatedButton(
             child: const Text("submit"),
             onPressed: () {
-              // your code
+              personalFolder = internal_login;
+              logger_dialog.i("internal folder changed: " + personalFolder);
+              Navigator.of(context, rootNavigator: true).pop();
             },
           ),
         ],
       );
     },
   );
+}
+
+String? validateName(String? name) {
+  return (name != null && !AppUtil.isCorrectPersonalFolder(name))
+      ? "wrong folder name"
+      : null;
 }

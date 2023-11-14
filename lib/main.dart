@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:process_runner/process_runner.dart';
 import 'package:scraplapl/RequestStatus.dart';
+import 'package:scraplapl/account_dialog.dart';
 import 'package:scraplapl/fuel_page.dart';
 import 'package:scraplapl/perfo_page.dart';
 import 'package:scraplapl/scrapping.dart';
@@ -32,6 +35,8 @@ String rerouting2 = "";
 
 String chosenAircraft = "DR400-120";
 
+String personalFolder = "default";
+
 class MainRoute extends StatefulWidget {
   const MainRoute({super.key});
 
@@ -45,8 +50,21 @@ class _MainRouteState extends State<MainRoute> {
   RequestStatus mergeStatus = RequestStatus.UNDONE;
 
   @override
+  void initState() {
+    super.initState();
+
+    // simply use this
+    Timer.run(() {
+      if (personalFolder == "default") {
+        open_login_dialog(context);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     //AppUtil.getDir();
+
     return Scaffold(
         appBar: AppBar(
           title: Text('MainPage ' + Directory.current.toString()),
@@ -246,7 +264,11 @@ class _MainRouteState extends State<MainRoute> {
                   ProcessRunnerResult result = await processRunner.runProcess(
                       ['./pdftk/pdftk.exe'] +
                           selectedPDFs +
-                          ['cat', 'output', 'Merged_$depArpt-$arrArpt.pdf'],
+                          [
+                            'cat',
+                            'output',
+                            '${personalFolder}_$depArpt-$arrArpt.pdf'
+                          ],
                       runInShell: false);
                   print(result.exitCode == 0
                       ? "merge is done succesfully"
