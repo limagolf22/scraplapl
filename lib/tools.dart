@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppUtil {
@@ -28,11 +29,12 @@ class AppUtil {
     extDir = directory!.path;
     print("External storage dir : " + extDir);
   }
-  
-  static bool isICAO(String arpt){
+
+  static bool isICAO(String arpt) {
     return RegExp(r"^[A-Z]{4}$").hasMatch(arpt);
   }
-  
+
+  static RegExp regexICAO = RegExp(r'^[A-Z]{4}$');
 }
 
 extension extString on String {
@@ -56,5 +58,15 @@ extension extString on String {
   bool get isValidPhone {
     final phoneRegExp = RegExp(r"^\+?0[0-9]{10}$");
     return phoneRegExp.hasMatch(this);
+  }
+}
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return new TextEditingValue(
+        text: newValue.text.toUpperCase(),
+        selection: TextSelection.collapsed(offset: newValue.text.length));
   }
 }

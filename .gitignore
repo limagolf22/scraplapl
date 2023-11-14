@@ -48,3 +48,6 @@ app.*.map.json
 
 # Project related 
 /lib/mylogins.txt
+
+# pdf generated files
+*.pdf

@@ -40,7 +40,8 @@ class MainRoute extends StatefulWidget {
 }
 
 class _MainRouteState extends State<MainRoute> {
-  RequestStatus scrappingStatus = RequestStatus.UNDONE;
+  RequestStatus scrappingNotamStatus = RequestStatus.UNDONE;
+  RequestStatus scrappingWeatherStatus = RequestStatus.UNDONE;
   RequestStatus mergeStatus = RequestStatus.UNDONE;
 
   @override
@@ -79,12 +80,18 @@ class _MainRouteState extends State<MainRoute> {
           TextFormField(
               textAlign: TextAlign.center,
               keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.characters,
+              inputFormatters: [UpperCaseTextFormatter()],
+              validator: validateICAO,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               onChanged: (value) {
-                depArpt = value;
-                if (scrappingStatus != RequestStatus.UNDONE ||
+                depArpt = value.toUpperCase();
+                if (scrappingNotamStatus != RequestStatus.UNDONE ||
+                    scrappingWeatherStatus != RequestStatus.UNDONE ||
                     mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
-                    scrappingStatus = RequestStatus.UNDONE;
+                    scrappingNotamStatus = RequestStatus.UNDONE;
+                    scrappingWeatherStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
                   });
                 }
@@ -94,12 +101,18 @@ class _MainRouteState extends State<MainRoute> {
           TextFormField(
               textAlign: TextAlign.center,
               keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.characters,
+              inputFormatters: [UpperCaseTextFormatter()],
+              validator: validateICAO,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               onChanged: (value) {
-                arrArpt = value;
-                if (scrappingStatus != RequestStatus.UNDONE ||
+                arrArpt = value.toUpperCase();
+                if (scrappingNotamStatus != RequestStatus.UNDONE ||
+                    scrappingWeatherStatus != RequestStatus.UNDONE ||
                     mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
-                    scrappingStatus = RequestStatus.UNDONE;
+                    scrappingNotamStatus = RequestStatus.UNDONE;
+                    scrappingWeatherStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
                   });
                 }
@@ -109,12 +122,18 @@ class _MainRouteState extends State<MainRoute> {
           TextFormField(
               textAlign: TextAlign.center,
               keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.characters,
+              inputFormatters: [UpperCaseTextFormatter()],
+              validator: validateICAO,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               onChanged: (value) {
-                rerouting1 = value;
-                if (scrappingStatus != RequestStatus.UNDONE ||
+                rerouting1 = value.toUpperCase();
+                if (scrappingNotamStatus != RequestStatus.UNDONE ||
+                    scrappingWeatherStatus != RequestStatus.UNDONE ||
                     mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
-                    scrappingStatus = RequestStatus.UNDONE;
+                    scrappingNotamStatus = RequestStatus.UNDONE;
+                    scrappingWeatherStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
                   });
                 }
@@ -124,12 +143,18 @@ class _MainRouteState extends State<MainRoute> {
           TextFormField(
               textAlign: TextAlign.center,
               keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.characters,
+              inputFormatters: [UpperCaseTextFormatter()],
+              validator: validateICAO,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               onChanged: (value) {
-                rerouting2 = value;
-                if (scrappingStatus != RequestStatus.UNDONE ||
+                rerouting2 = value.toUpperCase();
+                if (scrappingNotamStatus != RequestStatus.UNDONE ||
+                    scrappingWeatherStatus != RequestStatus.UNDONE ||
                     mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
-                    scrappingStatus = RequestStatus.UNDONE;
+                    scrappingNotamStatus = RequestStatus.UNDONE;
+                    scrappingWeatherStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
                   });
                 }
@@ -167,23 +192,28 @@ class _MainRouteState extends State<MainRoute> {
                     DateTime.now().toUtc().add(const Duration(minutes: 5));
 
                 Future<int> exitCodeNotam = getPdfNotamSofia(
-                    [depArpt, arrArpt,rerouting1,rerouting2].where((arpt) => AppUtil.isICAO(arpt)).toList(),
+                    [depArpt, arrArpt, rerouting1, rerouting2]
+                        .where((arpt) => AppUtil.isICAO(arpt))
+                        .toList(),
                     "${date.year}/${add0(date.month)}/${add0(date.day)}",
                     "${add0(date.hour)}:${add0(date.minute)}");
 
                 Future<int> exitCodeWeather =
                     getPdfWeather(depArpt, arrArpt, 40);
-                int mergeRes =
-                    (await Future.wait([exitCodeNotam, exitCodeWeather]))
-                        .reduce((a, b) => a + b);
+                List<int> mergeRes =
+                    (await Future.wait([exitCodeWeather, exitCodeNotam]));
                 setState(() {
-                  scrappingStatus = mergeRes == 0
+                  scrappingNotamStatus = mergeRes[1] == 0
+                      ? RequestStatus.SUCCESS
+                      : RequestStatus.FAIL;
+                  scrappingWeatherStatus = mergeRes[0] == 0
                       ? RequestStatus.SUCCESS
                       : RequestStatus.FAIL;
                 });
               },
             ),
-            iconRequestStatus(scrappingStatus)
+            iconRequestStatus(scrappingNotamStatus),
+            iconRequestStatus(scrappingWeatherStatus)
           ]),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextButton(
@@ -248,4 +278,8 @@ Icon iconRequestStatus(RequestStatus reqStatus) {
     default:
       return Icon(Icons.change_circle_outlined, color: Colors.transparent);
   }
+}
+
+String? validateICAO(String? icao) {
+  return (icao != null && !AppUtil.isICAO(icao)) ? "not ICAO format" : null;
 }
