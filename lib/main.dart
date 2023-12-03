@@ -72,7 +72,7 @@ class _MainRouteState extends State<MainRoute> {
             IconButton(
               color: const Color.fromARGB(255, 255, 255, 255),
               icon: const Icon(Icons.oil_barrel_rounded),
-              tooltip: 'go to oil page',
+              tooltip: 'go to fuel page',
               onPressed: () {
                 Navigator.push(
                   context,
@@ -194,7 +194,7 @@ class _MainRouteState extends State<MainRoute> {
                 chosenAircraft = value!;
               });
             },
-            items: ["DR400-120", "DR400-140B"]
+            items: ["DR400-120", "DR400-140B", "TB10"]
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,

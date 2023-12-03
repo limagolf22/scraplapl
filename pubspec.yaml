@@ -84,11 +84,13 @@ flutter:
   assets:
     - assets/images/perfoTab-DR400-120.png
     - assets/images/perfoTab-DR400-140B.png
+    - assets/images/perfoTab-TB10.png
     - assets/images/LD-DR400-120.png
     - assets/images/TO-DR400-120.png
     - assets/images/LD-DR400-140B.png
     - assets/images/TO-DR400-140B.png
-
+    - assets/images/LD-TB10.png
+    - assets/images/TO-TB10.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
