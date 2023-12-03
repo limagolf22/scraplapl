@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scraplapl/main.dart';
-import 'package:scraplapl/scrapping.dart';
+import 'package:scraplapl/pdf_generation.dart';
 
 import 'perfo_page.dart';
 
@@ -27,7 +27,7 @@ class FuelPage extends StatefulWidget {
 }
 
 class _FuelPageState extends State<FuelPage> {
-  int totalFuel = consoContent.values.reduce((int a, int b)=>a+b);
+  int totalFuel = consoContent.values.reduce((int a, int b) => a + b);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +57,10 @@ class _FuelPageState extends State<FuelPage> {
                                         keyboardType: TextInputType.number,
                                         controller: TextEditingController()
                                           ..text = consoContent[h].toString()
-                                          ..selection = TextSelection.collapsed(offset: consoContent[h].toString().length),
+                                          ..selection = TextSelection.collapsed(
+                                              offset: consoContent[h]
+                                                  .toString()
+                                                  .length),
                                         onChanged: (value) {
                                           try {
                                             consoContent[h] = value == ""

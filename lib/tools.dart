@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scraplapl/main.dart';
 
 class AppUtil {
+  static Logger logger = new Logger();
   static Future<String> createFolderInAppDocDir(String folderName) async {
     //Get this App Document Directory
     final Directory _appDocDir = await getApplicationDocumentsDirectory();
@@ -43,7 +45,7 @@ class AppUtil {
   static Future<void> getDir() async {
     var directory = await getExternalStorageDirectory();
     extDir = directory!.path;
-    print("External storage dir : " + extDir);
+    logger.d("External storage dir : " + extDir);
   }
 
   static bool isICAO(String arpt) {

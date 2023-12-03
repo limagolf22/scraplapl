@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scraplapl/ResizableImage.dart';
-import 'package:scraplapl/scrapping.dart';
+import 'package:scraplapl/pdf_generation.dart';
 import 'package:scraplapl/tools.dart';
 
 import 'main.dart';

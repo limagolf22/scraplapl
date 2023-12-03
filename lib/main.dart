@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:process_runner/process_runner.dart';
 import 'package:scraplapl/RequestStatus.dart';
 import 'package:scraplapl/account_dialog.dart';
@@ -48,6 +49,8 @@ class _MainRouteState extends State<MainRoute> {
   RequestStatus scrappingNotamStatus = RequestStatus.UNDONE;
   RequestStatus scrappingWeatherStatus = RequestStatus.UNDONE;
   RequestStatus mergeStatus = RequestStatus.UNDONE;
+
+  Logger logger = new Logger();
 
   @override
   void initState() {
@@ -238,7 +241,7 @@ class _MainRouteState extends State<MainRoute> {
                 child: const Text("merge pdf"),
                 onPressed: () async {
                   var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-                  print(dir);
+                  logger.d(dir);
                   List<String> selectedPDFs = [];
                   for (var p in [
                     "$dir/MTO_$depArpt-$arrArpt.pdf",
@@ -247,7 +250,7 @@ class _MainRouteState extends State<MainRoute> {
                     "$dir/Perfo_$depArpt-$arrArpt.pdf"
                   ]) {
                     if (await File(p).exists()) {
-                      print("path exists : " + p);
+                      logger.d("path exists : " + p);
                       selectedPDFs.add(p);
                     }
                     ;
@@ -267,12 +270,14 @@ class _MainRouteState extends State<MainRoute> {
                           [
                             'cat',
                             'output',
-                            '${personalFolder}_$depArpt-$arrArpt.pdf'
+                            'Merged_${personalFolder}_$depArpt-$arrArpt.pdf'
                           ],
                       runInShell: false);
-                  print(result.exitCode == 0
-                      ? "merge is done succesfully"
-                      : "failed to merge");
+                  if (result.exitCode == 0) {
+                    logger.i("merge is done succesfully");
+                  } else {
+                    logger.w("failed to merge");
+                  }
                   setState(() {
                     mergeStatus = result.exitCode == 0
                         ? RequestStatus.SUCCESS
