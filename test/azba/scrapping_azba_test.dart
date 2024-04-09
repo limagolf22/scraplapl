@@ -1,5 +1,4 @@
-import 'package:scraplapl/main.dart';
-import 'package:scraplapl/scrapping_azba.dart';
+import 'package:scraplapl/azba/scrapping_azba.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -35,7 +34,7 @@ void main() {
               "Y9Q3Ve72nN3PnTXmEtKnS4sggmdsigRMWH9kCDGHpCHyenFKKGhDq5vgBWZ4"));
     });
     test('test get Azba content', () async {
-      int res = await getPdfAzba("2024-04-09", "01:21");
+      int res = await getPdfAzba(DateTime.now());
       expect(res, equals(0));
     });
   });

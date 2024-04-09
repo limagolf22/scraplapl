@@ -51,3 +51,5 @@ app.*.map.json
 
 # pdf generated files
 *.pdf
+
+pdftk
