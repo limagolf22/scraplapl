@@ -67,9 +67,10 @@ createPerfoPDF(List<String> arpts) async {
                             ]);
                   }).toList(),
               border: (pw.TableBorder.all())),
-          File('assets/images/perfoTab-$chosenAircraft.png').existsSync()
+          File('data/flutter_assets/assets/images/perfoTab-$chosenAircraft.png')
+                  .existsSync()
               ? addPadding(pw.Image(pw.MemoryImage(
-                  File('assets/images/perfoTab-$chosenAircraft.png')
+                  File('data/flutter_assets/assets/images/perfoTab-$chosenAircraft.png')
                       .readAsBytesSync(),
                 )))
               : pw.Text('no image found')
