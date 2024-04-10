@@ -3,6 +3,8 @@ import 'package:logger/logger.dart';
 import 'package:requests/requests.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:scraplapl/azba_map.dart';
+import 'package:scraplapl/facade/azba/azba_parsing.dart';
 
 Future<int> getPdfAzba(DateTime date) async {
   var loggerAzba = Logger();
@@ -18,12 +20,15 @@ Future<int> getPdfAzba(DateTime date) async {
   }
   loggerAzba.d("secret code found : " + secretCode);
 
-  String formatedDate = date.toIso8601String().split("T")[0];
-  String formatedDatePlusOne =
-      date.add(const Duration(days: 1)).toIso8601String().split("T")[0];
+  String formatedDateBefore =
+      date.subtract(const Duration(days: 2)).toIso8601String().split("T")[0];
+  String formatedDate =
+      date.add(const Duration(days: 0)).toIso8601String().split("T")[0];
+  String formatedDateLastMonth =
+      "2024-03-21"; //date.subtract(const Duration(days: 30)).toIso8601String().split("T")[0];
 
   String data =
-      '?itemsPerPage=200&date=$formatedDate&timeSlots.startTime%5Bbefore%5D=${formatedDate}T00%3A01%3A30%2B00%3A00&timeSlots.endTime%5Bafter%5D=${formatedDatePlusOne}T00%3A22%3A00%2B00%3A00';
+      '?itemsPerPage=200&date=$formatedDateLastMonth&timeSlots.startTime%5Bbefore%5D=${formatedDate}T00%3A01%3A30%2B00%3A00&timeSlots.endTime%5Bafter%5D=${formatedDateBefore}T00%3A22%3A00%2B00%3A00';
 
   String urlStr =
       'https://bo-prod-sofia-vac.sia-france.fr/api/v2/r_t_b_as' + data;
@@ -56,7 +61,15 @@ Future<int> getPdfAzba(DateTime date) async {
     return 1;
   }
   var resultJson = res2.json();
-  loggerAzba.i(resultJson["@id"]);
+  if (resultJson["@id"] == null) {
+    //TODO: add validation of Azba datas
+    loggerAzba.w('content of Azba has the wrong format');
+    return 1;
+  }
+
+  azbaZones = parseAllAzbaZone(resultJson);
+  //loggerAzba.d(resultJson);
+  loggerAzba.d(azbaZones);
   return 0;
 }
 

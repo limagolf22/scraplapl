@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:scraplapl/azba/azba_zone.dart';
-import 'package:scraplapl/azba/scrapping_azba.dart';
+import 'package:scraplapl/facade/azba/azba_parsing.dart';
+import 'package:scraplapl/kernel/azba/azba_zone.dart';
 import 'package:test/test.dart';
 
 void main() {

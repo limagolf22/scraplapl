@@ -1,4 +1,4 @@
-import 'package:scraplapl/azba/scrapping_azba.dart';
+import 'package:scraplapl/facade/azba/scrapping_azba.dart';
 import 'package:test/test.dart';
 
 void main() {
