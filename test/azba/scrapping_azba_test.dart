@@ -26,15 +26,19 @@ void main() {
     });
 
     test('test secret id retriever function', () async {
-      String? code = getSecretCode(
-          'ecouverte",ign_api_map_type:"GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2 ",ign_api_user_agent:null,itemsPerPage:800,share_secret:"Y9Q3Ve72nN3PnTXmEtKnS4sggmdsigRMWH9kCDGHpCHyenFKKGhDq5vgBWZ4",urlTiles:"",tilesZones:[{label:"TILES.ZONE.FRANCE",active:!0,data:"france.mbtiles",size:180},{label:"TILES.ZONE.GUADELOUPE",active:!1,data:"guadeloupe.');
+      String? code = await scrapSecretCode();
       expect(
           code,
           equals(
               "Y9Q3Ve72nN3PnTXmEtKnS4sggmdsigRMWH9kCDGHpCHyenFKKGhDq5vgBWZ4"));
     });
     test('test get Azba content', () async {
-      int res = await getPdfAzba(DateTime.now());
+      int res = await getPdfActiveAzba(DateTime.now());
+      expect(res, equals(0));
+    });
+
+    test('test get all Azba test content', () async {
+      int res = await getPdfAllAzba(DateTime.now());
       expect(res, equals(0));
     });
   });

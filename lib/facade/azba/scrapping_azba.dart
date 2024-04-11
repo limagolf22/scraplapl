@@ -6,14 +6,12 @@ import 'package:crypto/crypto.dart';
 import 'package:scraplapl/azba_map.dart';
 import 'package:scraplapl/facade/azba/azba_parsing.dart';
 
-Future<int> getPdfAzba(DateTime date) async {
+Future<int> getPdfActiveAzba(DateTime date) async {
   var loggerAzba = Logger();
 
   loggerAzba.i("Request for Azba done at " + date.toString());
 
-  http.Response res1 = await http.get(Uri.parse(
-      'https://azba.sia-france.fr/main-es2015.69fe3091c43549df19b9.js'));
-  String? secretCode = getSecretCode(res1.body);
+  String? secretCode = await scrapSecretCode();
   if (secretCode == null) {
     loggerAzba.w("Failed to get Azba secret code");
     return 1;
@@ -21,9 +19,9 @@ Future<int> getPdfAzba(DateTime date) async {
   loggerAzba.d("secret code found : " + secretCode);
 
   String formatedDateBefore =
-      date.subtract(const Duration(days: 2)).toIso8601String().split("T")[0];
+      date.subtract(const Duration(days: 0)).toIso8601String().split("T")[0];
   String formatedDate =
-      date.add(const Duration(days: 0)).toIso8601String().split("T")[0];
+      date.add(const Duration(days: 2)).toIso8601String().split("T")[0];
   String formatedDateLastMonth =
       "2024-03-21"; //date.subtract(const Duration(days: 30)).toIso8601String().split("T")[0];
 
@@ -37,19 +35,9 @@ Future<int> getPdfAzba(DateTime date) async {
   var headers = {
     'AUTH': auth,
     'Accept': 'application/json, text/plain, */*',
-    'Accept-Language': 'fr,fr-FR;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
     'Connection': 'keep-alive',
     'Origin': 'https://azba.sia-france.fr',
     'Referer': 'https://azba.sia-france.fr/',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'cors',
-    'Sec-Fetch-Site': 'same-site',
-    'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0',
-    'sec-ch-ua':
-        '"Microsoft Edge";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
   };
 
   var url = Uri.parse(urlStr);
@@ -73,9 +61,85 @@ Future<int> getPdfAzba(DateTime date) async {
   return 0;
 }
 
-String? getSecretCode(String str) {
-  RegExp exp = RegExp(r'share_secret:"([^"]+)"');
-  return exp.firstMatch(str)?[1];
+Future<int> getPdfAllAzba(DateTime date) async {
+  var loggerAzba = Logger();
+
+  loggerAzba.i("Request for Azba done at " + date.toString());
+
+  String? secretCode = await scrapSecretCode();
+  if (secretCode == null) {
+    loggerAzba.w("Failed to get Azba secret code");
+    return 1;
+  }
+  loggerAzba.d("secret code found : " + secretCode);
+
+  String? formatedDateLastMonth = await scrapDate(secretCode);
+  if (formatedDateLastMonth == null) {
+    loggerAzba.w("Failed to get Azba validity date");
+    return 1;
+  }
+
+  String data = "?date=$formatedDateLastMonth&page=1&itemsPerPage=800";
+
+  String urlStr =
+      'https://bo-prod-sofia-vac.sia-france.fr/api/v2/r_t_b_as' + data;
+
+  String auth = generateAuth(secretCode, urlStr, "");
+  var headers = {
+    'AUTH': auth,
+    'Accept': 'application/json, text/plain, */*',
+    'Connection': 'keep-alive',
+    'Origin': 'https://azba.sia-france.fr',
+    'Referer': 'https://azba.sia-france.fr/',
+  };
+
+  var url = Uri.parse(urlStr);
+
+  var res = await http.get(url, headers: headers);
+
+  if (!res.success) {
+    loggerAzba.w("Failed to get Azba content : " + res.body);
+    return 1;
+  }
+  var resultJson = res.json();
+  if (resultJson["@id"] == null) {
+    //TODO: add validation of Azba datas
+    loggerAzba.w('content of Azba has the wrong format');
+    return 1;
+  }
+
+  azbaZones = parseAllAzbaZone(resultJson);
+  loggerAzba.d(azbaZones);
+
+  return 0;
+}
+
+Future<String?> scrapDate(String secretCode) async {
+  String urlStr =
+      'https://bo-prod-sofia-vac.sia-france.fr/api/v2/custom/currentDate';
+
+  String auth = generateAuth(secretCode, urlStr, "");
+  var headers = {
+    'AUTH': auth,
+    'Accept': 'application/json, text/plain, */*',
+    'Connection': 'keep-alive',
+    'Origin': 'https://azba.sia-france.fr',
+    'Referer': 'https://azba.sia-france.fr/',
+  };
+  var url = Uri.parse(urlStr);
+
+  var res = await http.get(url, headers: headers);
+  return res.success ? res.json()['rtba'] : null;
+}
+
+Future<String?> scrapSecretCode() async {
+  http.Response resJs = await http.get(Uri.parse(
+      'https://azba.sia-france.fr/main-es2015.69fe3091c43549df19b9.js'));
+  if (resJs.success) {
+    RegExp exp = RegExp(r'share_secret:"([^"]+)"');
+    return exp.firstMatch(resJs.body)?[1];
+  }
+  return null;
 }
 
 String generateAuth(String share_secret, String urlWithParams, String body) {

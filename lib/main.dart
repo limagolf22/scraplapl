@@ -5,6 +5,8 @@ import 'package:logger/logger.dart';
 import 'package:process_runner/process_runner.dart';
 import 'package:scraplapl/RequestStatus.dart';
 import 'package:scraplapl/account_dialog.dart';
+import 'package:scraplapl/azba_map.dart';
+import 'package:scraplapl/facade/azba/scrapping_azba.dart';
 import 'package:scraplapl/fuel_page.dart';
 import 'package:scraplapl/perfo_page.dart';
 import 'package:scraplapl/scrapping.dart';
@@ -48,6 +50,8 @@ class MainRoute extends StatefulWidget {
 class _MainRouteState extends State<MainRoute> {
   RequestStatus scrappingNotamStatus = RequestStatus.UNDONE;
   RequestStatus scrappingWeatherStatus = RequestStatus.UNDONE;
+  RequestStatus azbaStatus = RequestStatus.UNDONE;
+
   RequestStatus mergeStatus = RequestStatus.UNDONE;
 
   Logger logger = new Logger();
@@ -93,6 +97,17 @@ class _MainRouteState extends State<MainRoute> {
                   MaterialPageRoute(builder: (context) => const PerfoPage()),
                 );
               },
+            ),
+            IconButton(
+              color: const Color.fromARGB(255, 255, 255, 255),
+              icon: const Icon(Icons.format_shapes_sharp),
+              tooltip: 'go to azba page',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AzbaMapWidget()),
+                );
+              },
             )
           ],
         ),
@@ -109,10 +124,12 @@ class _MainRouteState extends State<MainRoute> {
                 depArpt = value.toUpperCase();
                 if (scrappingNotamStatus != RequestStatus.UNDONE ||
                     scrappingWeatherStatus != RequestStatus.UNDONE ||
+                    azbaStatus != RequestStatus.UNDONE ||
                     mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
                     scrappingNotamStatus = RequestStatus.UNDONE;
                     scrappingWeatherStatus = RequestStatus.UNDONE;
+                    azbaStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
                   });
                 }
@@ -130,10 +147,12 @@ class _MainRouteState extends State<MainRoute> {
                 arrArpt = value.toUpperCase();
                 if (scrappingNotamStatus != RequestStatus.UNDONE ||
                     scrappingWeatherStatus != RequestStatus.UNDONE ||
+                    azbaStatus != RequestStatus.UNDONE ||
                     mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
                     scrappingNotamStatus = RequestStatus.UNDONE;
                     scrappingWeatherStatus = RequestStatus.UNDONE;
+                    azbaStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
                   });
                 }
@@ -151,10 +170,12 @@ class _MainRouteState extends State<MainRoute> {
                 rerouting1 = value.toUpperCase();
                 if (scrappingNotamStatus != RequestStatus.UNDONE ||
                     scrappingWeatherStatus != RequestStatus.UNDONE ||
+                    azbaStatus != RequestStatus.UNDONE ||
                     mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
                     scrappingNotamStatus = RequestStatus.UNDONE;
                     scrappingWeatherStatus = RequestStatus.UNDONE;
+                    azbaStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
                   });
                 }
@@ -172,10 +193,12 @@ class _MainRouteState extends State<MainRoute> {
                 rerouting2 = value.toUpperCase();
                 if (scrappingNotamStatus != RequestStatus.UNDONE ||
                     scrappingWeatherStatus != RequestStatus.UNDONE ||
+                    azbaStatus != RequestStatus.UNDONE ||
                     mergeStatus != RequestStatus.UNDONE) {
                   setState(() {
                     scrappingNotamStatus = RequestStatus.UNDONE;
                     scrappingWeatherStatus = RequestStatus.UNDONE;
+                    azbaStatus = RequestStatus.UNDONE;
                     mergeStatus = RequestStatus.UNDONE;
                   });
                 }
@@ -207,11 +230,11 @@ class _MainRouteState extends State<MainRoute> {
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextButton(
-              child: const Text("upload datas (Notam+Weather)"),
+              child: const Text("upload datas (Notam+Weather+AZBA)"),
               onPressed: () async {
                 var date =
                     DateTime.now().toUtc().add(const Duration(minutes: 5));
-
+/*
                 Future<int> exitCodeNotam = getPdfNotamSofia(
                     [depArpt, arrArpt, rerouting1, rerouting2]
                         .where((arpt) => AppUtil.isICAO(arpt))
@@ -221,20 +244,31 @@ class _MainRouteState extends State<MainRoute> {
 
                 Future<int> exitCodeWeather =
                     getPdfWeather(depArpt, arrArpt, 40);
-                List<int> mergeRes =
-                    (await Future.wait([exitCodeWeather, exitCodeNotam]));
+*/
+                var exitCodeNotam =
+                    Future.delayed(const Duration(milliseconds: 100), () => 1);
+                var exitCodeWeather =
+                    Future.delayed(const Duration(milliseconds: 100), () => 1);
+                Future<int> exitCodeAzba = getPdfAllAzba(DateTime.now());
+
+                List<int> mergeRes = (await Future.wait(
+                    [exitCodeNotam, exitCodeWeather, exitCodeAzba]));
                 setState(() {
-                  scrappingNotamStatus = mergeRes[1] == 0
+                  scrappingNotamStatus = mergeRes[0] == 0
                       ? RequestStatus.SUCCESS
                       : RequestStatus.FAIL;
-                  scrappingWeatherStatus = mergeRes[0] == 0
+                  scrappingWeatherStatus = mergeRes[1] == 0
+                      ? RequestStatus.SUCCESS
+                      : RequestStatus.FAIL;
+                  azbaStatus = mergeRes[2] == 0
                       ? RequestStatus.SUCCESS
                       : RequestStatus.FAIL;
                 });
               },
             ),
             iconRequestStatus(scrappingNotamStatus),
-            iconRequestStatus(scrappingWeatherStatus)
+            iconRequestStatus(scrappingWeatherStatus),
+            iconRequestStatus(azbaStatus)
           ]),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextButton(

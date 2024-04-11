@@ -38,10 +38,9 @@ class AzbaZone {
         'upperUnit: $upperUnit, lowerUnit: $lowerUnit, coordinates: $coordinates, '
         'periods: $periods, rmk: $rmk}';
   }
-}
 
-class Pair<T> {
-  T left;
-  T right;
-  Pair(this.left, this.right);
+  bool isAzbaActive(DateTime dateTime) {
+    return this.periods.any((period) =>
+        period.start.isBefore(dateTime) && period.end.isAfter(dateTime));
+  }
 }
