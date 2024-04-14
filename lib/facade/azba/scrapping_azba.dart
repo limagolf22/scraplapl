@@ -55,7 +55,7 @@ Future<int> getPdfActiveAzba(DateTime date) async {
     return 1;
   }
 
-  azbaZones = parseAllAzbaZone(resultJson);
+  changeAzbaZone(parseAllAzbaZone(resultJson));
   //loggerAzba.d(resultJson);
   loggerAzba.d(azbaZones);
   return 0;
@@ -108,7 +108,7 @@ Future<int> getPdfAllAzba(DateTime date) async {
     return 1;
   }
 
-  azbaZones = parseAllAzbaZone(resultJson);
+  changeAzbaZone(parseAllAzbaZone(resultJson));
   loggerAzba.d(azbaZones);
 
   return 0;

@@ -91,5 +91,44 @@ void main() {
                   "Administrator : CDPGE Athis-Mons.#Avoidance mandatory during activation hours.")
               .toString()));
     });
+    test('test a get Activation Starts and Ends', () async {
+      var az = AzbaZone(
+          "45 S2",
+          "R",
+          65,
+          800,
+          "FL",
+          "FT",
+          [LatLng(48.010278, 5.878056), LatLng(48.089444, 5.701389)],
+          [
+            DateTimeRange(
+                start: DateTime(2023, 12, 8), end: DateTime(2023, 12, 12)),
+            DateTimeRange(
+                start: DateTime(2023, 12, 10), end: DateTime(2023, 12, 14)),
+            DateTimeRange(
+                start: DateTime(2023, 12, 6), end: DateTime(2023, 12, 8)),
+            DateTimeRange(
+                start: DateTime(2023, 12, 2), end: DateTime(2023, 12, 3)),
+            DateTimeRange(
+                start: DateTime(2023, 12, 14), end: DateTime(2023, 12, 15)),
+            DateTimeRange(
+                start: DateTime(2023, 12, 16), end: DateTime(2023, 12, 20))
+          ],
+          "Test");
+      expect(
+          az.getActivationStarts(),
+          equals(Set.of({
+            DateTime(2023, 12, 2),
+            DateTime(2023, 12, 6),
+            DateTime(2023, 12, 16)
+          })));
+      expect(
+          az.getActivationEnds(),
+          equals(Set.of({
+            DateTime(2023, 12, 3),
+            DateTime(2023, 12, 15),
+            DateTime(2023, 12, 20)
+          })));
+    });
   });
 }

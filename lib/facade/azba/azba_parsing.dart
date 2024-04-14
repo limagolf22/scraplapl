@@ -9,7 +9,7 @@ List<AzbaZone> parseAllAzbaZone(dynamic json) {
 
 AzbaZone parseAzbaZone(dynamic json) {
   List coordinates = json["coordinates"];
-  List periods = json["days"];
+  List periods = json["timeSlots"];
   return AzbaZone(
       json["name"],
       json["initialCodeType"],
@@ -46,8 +46,8 @@ LatLng parseLatLng(dynamic json) {
 }
 
 DateTimeRange parseDateTimePeriod(dynamic json) {
-  DateTime start = DateTime.parse(json["startDate"]);
-  DateTime end = DateTime.parse(json["endDate"]);
+  DateTime start = DateTime.parse(json["startTime"]);
+  DateTime end = DateTime.parse(json["endTime"]);
 
   return DateTimeRange(start: start, end: end);
 }

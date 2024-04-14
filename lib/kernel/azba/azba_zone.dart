@@ -40,7 +40,32 @@ class AzbaZone {
   }
 
   bool isAzbaActive(DateTime dateTime) {
-    return this.periods.any((period) =>
-        period.start.isBefore(dateTime) && period.end.isAfter(dateTime));
+    return this.periods.any((p) => isWithin(dateTime, p));
   }
+
+  Set<DateTime> getActivationStarts() {
+    return this
+        .periods
+        .where((p1) => !this
+            .periods
+            .any((p2) => isWithin(p1.start, p2) && p1.start != p2.start))
+        .map((p) => p.start)
+        .toSet();
+  }
+
+  Set<DateTime> getActivationEnds() {
+    return this
+        .periods
+        .where((p1) =>
+            !this.periods.any((p2) => isWithin(p1.end, p2) && p1.end != p2.end))
+        .map((p) => p.end)
+        .toSet();
+  }
+}
+
+/**
+ * test if a moment is within a period : t in [s;e[
+ */
+bool isWithin(DateTime dateTime, DateTimeRange period) {
+  return !period.start.isAfter(dateTime) && period.end.isAfter(dateTime);
 }
