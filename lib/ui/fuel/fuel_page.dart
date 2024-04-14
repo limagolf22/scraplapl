@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scraplapl/main.dart';
-import 'package:scraplapl/pdf_generation.dart';
+import 'package:scraplapl/kernel/perfo/pdf_generation.dart';
 
-import 'perfo_page.dart';
+import '../perfo/perfo_page.dart';
 
 const headersConso = [
   "taxi",

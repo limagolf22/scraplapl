@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:process_runner/process_runner.dart';
 import 'package:scraplapl/RequestStatus.dart';
-import 'package:scraplapl/account_dialog.dart';
-import 'package:scraplapl/azba_map.dart';
+import 'package:scraplapl/ui/account_dialog.dart';
+import 'package:scraplapl/ui/azba/azba_map.dart';
 import 'package:scraplapl/facade/azba/scrapping_azba.dart';
-import 'package:scraplapl/fuel_page.dart';
-import 'package:scraplapl/perfo_page.dart';
-import 'package:scraplapl/scrapping.dart';
-import 'package:scraplapl/scrapping_Notam.dart';
+import 'package:scraplapl/ui/fuel/fuel_page.dart';
+import 'package:scraplapl/ui/perfo/perfo_page.dart';
 import 'package:scraplapl/tools.dart';
 import 'dart:io';
 

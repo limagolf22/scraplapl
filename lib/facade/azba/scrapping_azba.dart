@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:requests/requests.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:scraplapl/azba_map.dart';
+import 'package:scraplapl/ui/azba/azba_map.dart';
 import 'package:scraplapl/facade/azba/azba_parsing.dart';
 
 Future<int> getPdfActiveAzba(DateTime date) async {

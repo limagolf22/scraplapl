@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' hide Path;
-import 'package:scraplapl/azba_utils.dart';
+import 'package:scraplapl/ui/azba/azba_utils.dart';
 import 'package:scraplapl/kernel/azba/azba_zone.dart';
 import 'package:polylabel/polylabel.dart';
 import 'dart:math';
@@ -9,12 +9,17 @@ List<AzbaZone> azbaZones = [];
 List<DateTime> activationsTimes = [];
 
 void changeAzbaZone(List<AzbaZone> _azbaZones) {
+  var now = DateTime.now();
   azbaZones = _azbaZones;
-  activationsTimes = azbaZones
-      .map((az) => az.getActivationStarts().union(az.getActivationEnds()))
-      .expand((e) => e)
-      .toSet()
-      .toList();
+  activationsTimes = [now] +
+      azbaZones
+          .map((az) => az.getActivationStarts().union(az.getActivationEnds()))
+          .expand((e) => e)
+          .where((dt) => dt.isAfter(now))
+          .toSet()
+          .toList();
+  activationsTimes
+      .sort((a, b) => a.millisecondsSinceEpoch - b.millisecondsSinceEpoch);
 }
 
 class AzbaMapWidget extends StatefulWidget {
