@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:requests/requests.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:scraplapl/facade/azba/azba_pdf.dart';
 import 'package:scraplapl/ui/azba/azba_map.dart';
 import 'package:scraplapl/facade/azba/azba_parsing.dart';
 
@@ -110,7 +111,7 @@ Future<int> getPdfAllAzba(DateTime date) async {
 
   changeAzbaZone(parseAllAzbaZone(resultJson));
   loggerAzba.d(azbaZones);
-
+  createAzbaPDF(["LFXX", "LFXY"]);
   return 0;
 }
 

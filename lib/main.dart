@@ -75,7 +75,6 @@ class _MainRouteState extends State<MainRoute> {
           title: Text('MainPage ' + Directory.current.toString()),
           actions: <Widget>[
             IconButton(
-              color: const Color.fromARGB(255, 255, 255, 255),
               icon: const Icon(Icons.oil_barrel_rounded),
               tooltip: 'go to fuel page',
               onPressed: () {
@@ -86,7 +85,6 @@ class _MainRouteState extends State<MainRoute> {
               },
             ),
             IconButton(
-              color: const Color.fromARGB(255, 255, 255, 255),
               icon: const Icon(Icons.flight_takeoff),
               tooltip: 'go to perfo page',
               onPressed: () {
@@ -97,7 +95,6 @@ class _MainRouteState extends State<MainRoute> {
               },
             ),
             IconButton(
-              color: const Color.fromARGB(255, 255, 255, 255),
               icon: const Icon(Icons.format_shapes_sharp),
               tooltip: 'go to azba page',
               onPressed: () {

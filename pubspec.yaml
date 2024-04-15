@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,9 +35,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   requests: ^4.4.1
   path_provider: ^2.0.11
-  pdf: ^3.8.2
-  pdf_merge: ^0.0.1
-  pdf_merger: ^0.0.6
+  pdf: ^3.10.8
   process_runner: ^4.1.2
   logger: ^2.0.2+1
   latlong2: ^0.8.2
@@ -48,7 +46,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_launcher_icons: "^0.10.0"
+  flutter_launcher_icons: "^0.12.0"
 
 flutter_icons:
   android: "launcher_icon"

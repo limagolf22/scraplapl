@@ -5,6 +5,8 @@ import 'package:scraplapl/kernel/azba/azba_zone.dart';
 import 'package:polylabel/polylabel.dart';
 import 'dart:math';
 
+import '../../kernel/azba/azba_coord.dart';
+
 List<AzbaZone> azbaZones = [];
 List<DateTime> activationsTimes = [];
 
@@ -107,11 +109,8 @@ class PolygonPainter extends CustomPainter {
 
     List<Offset> offsets = [];
     for (var point in points) {
-      // Convertir les coordonnées géographiques en coordonnées de dessin
-      offsets.add(Offset(
-        (point.longitude + 5) * (size.width / 15),
-        size.height - (point.latitude - 41) * (size.height / 11),
-      ));
+      var pt = latLngToPixPoint(point, size.width, size.height);
+      offsets.add(Offset(pt.x, pt.y));
     }
 
     // Dessiner le polygone
@@ -155,11 +154,8 @@ class ContourPainter extends CustomPainter {
 
     List<Offset> offsets = [];
     for (var point in points) {
-      // Convertir les coordonnées géographiques en coordonnées de dessin
-      offsets.add(Offset(
-        (point.longitude + 5) * (size.width / 15),
-        size.height - (point.latitude - 41) * (size.height / 11),
-      ));
+      var pt = latLngToPixPoint(point, size.width, size.height);
+      offsets.add(Offset(pt.x, pt.y));
     }
 
     // Dessiner le polygone
