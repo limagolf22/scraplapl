@@ -32,13 +32,9 @@ void main() {
           equals(
               "Y9Q3Ve72nN3PnTXmEtKnS4sggmdsigRMWH9kCDGHpCHyenFKKGhDq5vgBWZ4"));
     });
-    test('test get Azba content', () async {
-      int res = await getPdfActiveAzba(DateTime.now());
-      expect(res, equals(0));
-    });
 
     test('test get all Azba test content', () async {
-      int res = await getPdfAllAzba(DateTime.now());
+      int res = await scrapPdfAllAzba("LFXX","LFXY");
       expect(res, equals(0));
     });
   });

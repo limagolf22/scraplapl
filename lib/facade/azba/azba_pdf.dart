@@ -8,7 +8,7 @@ import 'package:scraplapl/tools.dart';
 import '../../ui/azba/azba_map.dart';
 import '../../ui/azba/azba_utils.dart';
 
-createAzbaPDF(List<String> arpts) async {
+createAzbaPDF(String dep, String arr) async {
   final pdf = pw.Document();
 
   pw.Widget widgetContour = generateFranceContour(franceContour
@@ -50,7 +50,7 @@ createAzbaPDF(List<String> arpts) async {
   }
 
   var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-  final file = File("$dir/Azba_${arpts[0]}-${arpts[1]}.pdf");
+  final file = File("$dir/Azba_${dep}-${arr}.pdf");
   await file.writeAsBytes(await pdf.save());
 }
 

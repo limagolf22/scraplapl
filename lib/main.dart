@@ -12,6 +12,9 @@ import 'package:scraplapl/ui/perfo/perfo_page.dart';
 import 'package:scraplapl/tools.dart';
 import 'dart:io';
 
+import 'facade/notam/scrapping_Notam.dart';
+import 'facade/weather/scrapping.dart';
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -229,7 +232,7 @@ class _MainRouteState extends State<MainRoute> {
               onPressed: () async {
                 var date =
                     DateTime.now().toUtc().add(const Duration(minutes: 5));
-/*
+
                 Future<int> exitCodeNotam = getPdfNotamSofia(
                     [depArpt, arrArpt, rerouting1, rerouting2]
                         .where((arpt) => AppUtil.isICAO(arpt))
@@ -239,12 +242,8 @@ class _MainRouteState extends State<MainRoute> {
 
                 Future<int> exitCodeWeather =
                     getPdfWeather(depArpt, arrArpt, 40);
-*/
-                var exitCodeNotam =
-                    Future.delayed(const Duration(milliseconds: 100), () => 1);
-                var exitCodeWeather =
-                    Future.delayed(const Duration(milliseconds: 100), () => 1);
-                Future<int> exitCodeAzba = getPdfAllAzba(DateTime.now());
+
+                Future<int> exitCodeAzba = scrapPdfAllAzba(depArpt, arrArpt);
 
                 List<int> mergeRes = (await Future.wait(
                     [exitCodeNotam, exitCodeWeather, exitCodeAzba]));
@@ -275,6 +274,7 @@ class _MainRouteState extends State<MainRoute> {
                   for (var p in [
                     "$dir/MTO_$depArpt-$arrArpt.pdf",
                     "$dir/NotamSofia_$depArpt-$arrArpt.pdf",
+                    "$dir/Azba_$depArpt-$arrArpt.pdf",
                     "$dir/Conso_$depArpt-$arrArpt.pdf",
                     "$dir/Perfo_$depArpt-$arrArpt.pdf"
                   ]) {

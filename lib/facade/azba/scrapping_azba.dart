@@ -7,65 +7,10 @@ import 'package:scraplapl/facade/azba/azba_pdf.dart';
 import 'package:scraplapl/ui/azba/azba_map.dart';
 import 'package:scraplapl/facade/azba/azba_parsing.dart';
 
-Future<int> getPdfActiveAzba(DateTime date) async {
+Future<int> scrapPdfAllAzba(String dep, String arr) async {
   var loggerAzba = Logger();
 
-  loggerAzba.i("Request for Azba done at " + date.toString());
-
-  String? secretCode = await scrapSecretCode();
-  if (secretCode == null) {
-    loggerAzba.w("Failed to get Azba secret code");
-    return 1;
-  }
-  loggerAzba.d("secret code found : " + secretCode);
-
-  String formatedDateBefore =
-      date.subtract(const Duration(days: 0)).toIso8601String().split("T")[0];
-  String formatedDate =
-      date.add(const Duration(days: 2)).toIso8601String().split("T")[0];
-  String formatedDateLastMonth =
-      "2024-03-21"; //date.subtract(const Duration(days: 30)).toIso8601String().split("T")[0];
-
-  String data =
-      '?itemsPerPage=200&date=$formatedDateLastMonth&timeSlots.startTime%5Bbefore%5D=${formatedDate}T00%3A01%3A30%2B00%3A00&timeSlots.endTime%5Bafter%5D=${formatedDateBefore}T00%3A22%3A00%2B00%3A00';
-
-  String urlStr =
-      'https://bo-prod-sofia-vac.sia-france.fr/api/v2/r_t_b_as' + data;
-
-  String auth = generateAuth(secretCode, urlStr, "");
-  var headers = {
-    'AUTH': auth,
-    'Accept': 'application/json, text/plain, */*',
-    'Connection': 'keep-alive',
-    'Origin': 'https://azba.sia-france.fr',
-    'Referer': 'https://azba.sia-france.fr/',
-  };
-
-  var url = Uri.parse(urlStr);
-
-  var res2 = await http.get(url, headers: headers);
-
-  if (!res2.success) {
-    loggerAzba.w("Failed to get Azba content : " + res2.body);
-    return 1;
-  }
-  var resultJson = res2.json();
-  if (resultJson["@id"] == null) {
-    //TODO: add validation of Azba datas
-    loggerAzba.w('content of Azba has the wrong format');
-    return 1;
-  }
-
-  changeAzbaZone(parseAllAzbaZone(resultJson));
-  //loggerAzba.d(resultJson);
-  loggerAzba.d(azbaZones);
-  return 0;
-}
-
-Future<int> getPdfAllAzba(DateTime date) async {
-  var loggerAzba = Logger();
-
-  loggerAzba.i("Request for Azba done at " + date.toString());
+  loggerAzba.i("Request for Azba started");
 
   String? secretCode = await scrapSecretCode();
   if (secretCode == null) {
@@ -110,8 +55,7 @@ Future<int> getPdfAllAzba(DateTime date) async {
   }
 
   changeAzbaZone(parseAllAzbaZone(resultJson));
-  loggerAzba.d(azbaZones);
-  createAzbaPDF(["LFXX", "LFXY"]);
+  createAzbaPDF(dep, arr);
   return 0;
 }
 
