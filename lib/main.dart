@@ -260,9 +260,10 @@ class _MainRouteState extends State<MainRoute> {
                 });
               },
             ),
-            iconRequestStatus(scrappingNotamStatus),
-            iconRequestStatus(scrappingWeatherStatus),
-            iconRequestStatus(azbaStatus)
+            iconRequestStatus(scrappingNotamStatus, "Notam scrapping status"),
+            iconRequestStatus(
+                scrappingWeatherStatus, "Weather scrapping status"),
+            iconRequestStatus(azbaStatus, "Azba scrapping status")
           ]),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextButton(
@@ -313,7 +314,7 @@ class _MainRouteState extends State<MainRoute> {
                         : RequestStatus.FAIL;
                   });
                 }),
-            iconRequestStatus(mergeStatus)
+            iconRequestStatus(mergeStatus, "Pdf Merge Status")
           ])
         ]));
   }
@@ -323,16 +324,24 @@ String add0(int num) {
   return num < 10 ? "0$num" : num.toString();
 }
 
-Icon iconRequestStatus(RequestStatus reqStatus) {
+Widget iconRequestStatus(RequestStatus reqStatus, String tooltip) {
   switch (reqStatus) {
     case RequestStatus.UNDONE:
-      return Icon(Icons.change_circle_outlined, color: Colors.transparent);
+      return Tooltip(
+          message: tooltip,
+          child: Icon(Icons.change_circle_outlined, color: Colors.transparent));
     case RequestStatus.SUCCESS:
-      return Icon(Icons.check_rounded, color: Colors.green);
+      return Tooltip(
+          message: tooltip,
+          child: Icon(Icons.check_rounded, color: Colors.green));
     case RequestStatus.FAIL:
-      return Icon(Icons.error_outline, color: Colors.red);
+      return Tooltip(
+          message: tooltip,
+          child: Icon(Icons.error_outline, color: Colors.red));
     default:
-      return Icon(Icons.change_circle_outlined, color: Colors.transparent);
+      return Tooltip(
+          message: tooltip,
+          child: Icon(Icons.change_circle_outlined, color: Colors.transparent));
   }
 }
 
