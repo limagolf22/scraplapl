@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -12,7 +13,6 @@ import 'package:scraplapl/facade/azba/scrapping_azba.dart';
 import 'package:scraplapl/ui/fuel/fuel_page.dart';
 import 'package:scraplapl/ui/perfo/perfo_page.dart';
 import 'package:scraplapl/tools.dart';
-import 'dart:io';
 
 import 'facade/notam/scrapping_Notam.dart';
 import 'facade/weather/scrapping.dart';
@@ -40,7 +40,9 @@ String arrArpt = "";
 String rerouting1 = "";
 String rerouting2 = "";
 
-String chosenAircraft = "DR400-120";
+final PLANE_TYPES = {"DR400-120", "DR400-140B", "TB10"};
+
+String chosenAircraft = PLANE_TYPES.first;
 
 String personalFolder = "default";
 
@@ -192,8 +194,7 @@ class _MainRouteState extends State<MainRoute> {
                 chosenAircraft = value!;
               });
             },
-            items: ["DR400-120", "DR400-140B", "TB10"]
-                .map<DropdownMenuItem<String>>((String value) {
+            items: PLANE_TYPES.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -219,7 +220,7 @@ class _MainRouteState extends State<MainRoute> {
 
                 Future<int> exitCodeAzba = scrapPdfAllAzba(depArpt, arrArpt);
 
-                Future<int> exitCodeSupAip = retrieveSupAipPdfs(date);
+                Future<int> exitCodeSupAip = retrieveAllSupAips(date);
 
                 List<int> mergeRes = (await Future.wait([
                   exitCodeNotam,

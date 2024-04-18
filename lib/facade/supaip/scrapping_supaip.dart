@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:html/dom.dart';
@@ -7,35 +6,24 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:requests/requests.dart';
 import 'package:scraplapl/facade/supaip/supaip_parsing.dart';
+import 'package:scraplapl/ui/supaip/table_supaip.dart';
 
-import '../../kernel/supaip/supaip_model.dart';
-import '../../tools.dart';
-import '../../ui/supaip/table_supaip.dart';
+final Set<String> FIRs =
+    Set.unmodifiable({'LFBB', 'LFRR', 'LFMM', 'LFFF', 'LFEE'});
 
 var loggerSupAip = Logger();
 
-Future<int> retrieveSupAipPdfs(DateTime instant) async {
-  if (await scrapSupAips(instant) != 0) {
-    return 1;
-  }
-  return 0;
-}
-
-Future<int> downloadSupAipPdfs(List<SupAip> supaips) async {
-  return (await Future.wait(supaips
-          .map((sa) => http
-              .get(Uri.parse(sa.link))
-              .then((res) => savePdf(res, adaptSupAipId(sa))))
-          .toList()))
+Future<int> retrieveAllSupAips(DateTime instant) async {
+  return (await Future.wait(FIRs.map((fir) => scrapSupAips(instant, fir))))
       .reduce((a, b) => a + b);
 }
 
-Future<int> scrapSupAips(DateTime instant) async {
+Future<int> scrapSupAips(DateTime instant, String fir) async {
   var instantAfterDay = instant.add(const Duration(days: 1));
 
-  var res = await scrapSupAipHtml();
+  var res = await scrapSupAipHtml(fir);
   if (res == null) {
-    loggerSupAip.w("Failed to scrap SupAip page");
+    loggerSupAip.w("Failed to scrap SupAip page for FIR $fir");
     return 1;
   }
 
@@ -45,24 +33,7 @@ Future<int> scrapSupAips(DateTime instant) async {
   return 0;
 }
 
-Future<int> savePdf(http.Response res, String id) async {
-  String dir = await AppUtil.createFolderInAppDocDir('pdfs');
-  File file = File("$dir/SupAip_$id.pdf");
-  if (file.existsSync()) {
-    loggerSupAip.i("Sup Aip $id already downloaded");
-    return 0;
-  }
-  if (res.success) {
-    await file.writeAsBytes(res.bodyBytes);
-    loggerSupAip.i("Sup Aip $id Pdf written");
-    return 0;
-  } else {
-    loggerSupAip.w("Failed to get Sup Aip $id");
-    return 1;
-  }
-}
-
-Future<String?> scrapSupAipHtml() async {
+Future<String?> scrapSupAipHtml(String fir) async {
   var key = generateFormKeyString();
   var headers = {
     'Accept':
@@ -71,7 +42,7 @@ Future<String?> scrapSupAipHtml() async {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  var data = 'title=&location=LFBB&form_key=$key';
+  var data = 'title=&location=$fir&form_key=$key';
 
   var url = Uri.parse(
       'https://www.sia.aviation-civile.gouv.fr/documents/supaip/aip/id/6');

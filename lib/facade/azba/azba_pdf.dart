@@ -6,9 +6,8 @@ import 'package:polylabel/polylabel.dart';
 import 'package:scraplapl/kernel/azba/azba_coord.dart';
 import 'package:scraplapl/kernel/azba/azba_zone.dart';
 import 'package:scraplapl/tools.dart';
-
-import '../../ui/azba/azba_map.dart';
-import '../../ui/azba/azba_utils.dart';
+import 'package:scraplapl/ui/azba/azba_map.dart';
+import 'package:scraplapl/ui/azba/azba_utils.dart';
 
 createAzbaPDF(String dep, String arr) async {
   final pdf = pw.Document();

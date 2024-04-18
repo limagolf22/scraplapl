@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:scraplapl/main.dart';
 import 'package:scraplapl/tools.dart';
-
-import '../main.dart';
 
 void open_login_dialog(BuildContext context) {
   Logger logger_dialog = Logger();

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scraplapl/main.dart';
 import 'package:scraplapl/ui/perfo/ResizableImage.dart';
 import 'package:scraplapl/kernel/perfo/pdf_generation.dart';
 import 'package:scraplapl/tools.dart';
-
-import '../../main.dart';
 
 const headerPerfsInputs = ["alti(ft)", "T(°C)", "vent(kts)", "herbe"];
 const headerPerfsOutputs = ["TOD", "TODA", "LD", "LDA"];

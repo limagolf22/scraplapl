@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:scraplapl/facade/supaip/scrapping_supaip.dart';
+import 'package:scraplapl/RequestStatus.dart';
+import 'package:scraplapl/facade/supaip/supaip_pdf.dart';
+import 'package:scraplapl/kernel/supaip/supaip_model.dart';
 import 'package:scraplapl/main.dart';
-
-import '../../RequestStatus.dart';
-import '../../kernel/supaip/supaip_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 List<SupAip> supAips = [];
 
@@ -58,12 +58,23 @@ class _SupAipTableState extends State<SupAipTable> {
                                   TableCellVerticalAlignment.middle,
                               child: Padding(
                                 padding: const EdgeInsets.all(6.0),
-                                child: Text(
-                                  sa.id,
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: GestureDetector(
+                                      child: Text(
+                                        sa.id,
+                                        style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            decorationColor:
+                                                Colors.blue.shade800,
+                                            decorationThickness: 2.0,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue.shade800),
+                                      ),
+                                      onTap: () => openURL(sa.link),
+                                    )),
                               )),
                           TableCell(
                               verticalAlignment:
@@ -98,5 +109,12 @@ class _SupAipTableState extends State<SupAipTable> {
             ],
           ),
         )));
+  }
+}
+
+void openURL(String url) async {
+  var uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
   }
 }

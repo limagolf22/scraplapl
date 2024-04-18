@@ -4,8 +4,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:scraplapl/ui/fuel/fuel_page.dart';
 import 'package:scraplapl/main.dart';
 import 'package:scraplapl/tools.dart';
-
-import '../../ui/perfo/perfo_page.dart';
+import 'package:scraplapl/ui/perfo/perfo_page.dart';
 
 createPerfoPDF(List<String> arpts) async {
   final pdf = pw.Document();

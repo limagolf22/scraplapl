@@ -96,7 +96,7 @@ void main() {
     });
     test('test Supaip parser function', () async {
       var now = DateTime.now();
-      expect(await scrapSupAips(now), equals(0));
+      expect(await scrapSupAips(now, "LFBB"), equals(0));
     });
   });
 }
