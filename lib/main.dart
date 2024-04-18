@@ -16,6 +16,7 @@ import 'dart:io';
 
 import 'facade/notam/scrapping_Notam.dart';
 import 'facade/weather/scrapping.dart';
+import 'ui/supaip/table_supaip.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -107,6 +108,16 @@ class _MainRouteState extends State<MainRoute> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AzbaMapWidget()),
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.warning_amber_rounded),
+              tooltip: 'go to supaip page',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SupAipTable()),
                 );
               },
             )

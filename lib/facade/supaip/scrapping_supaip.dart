@@ -7,20 +7,22 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:requests/requests.dart';
 import 'package:scraplapl/facade/supaip/supaip_parsing.dart';
-import 'package:scraplapl/kernel/supaip/supaip_model.dart';
 
+import '../../kernel/supaip/supaip_model.dart';
 import '../../tools.dart';
+import '../../ui/supaip/table_supaip.dart';
 
 var loggerSupAip = Logger();
-
-List<SupAip> supAips = [];
 
 Future<int> retrieveSupAipPdfs(DateTime instant) async {
   if (await scrapSupAips(instant) != 0) {
     return 1;
   }
+  return 0;
+}
 
-  return (await Future.wait(supAips
+Future<int> downloadSupAipPdfs(List<SupAip> supaips) async {
+  return (await Future.wait(supaips
           .map((sa) => http
               .get(Uri.parse(sa.link))
               .then((res) => savePdf(res, adaptSupAipId(sa))))
