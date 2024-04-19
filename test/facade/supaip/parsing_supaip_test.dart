@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
-import 'package:scraplapl/facade/supaip/scrapping_supaip.dart';
+import 'package:scraplapl/facade/supaip/supaip_scrapping.dart';
 import 'package:scraplapl/facade/supaip/supaip_parsing.dart';
 import 'package:scraplapl/kernel/supaip/supaip_model.dart';
 import 'package:test/test.dart';

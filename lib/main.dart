@@ -4,19 +4,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:process_runner/process_runner.dart';
-import 'package:scraplapl/RequestStatus.dart';
-import 'package:scraplapl/facade/supaip/scrapping_supaip.dart';
+import 'package:scraplapl/ui/formatter.dart';
+import 'package:scraplapl/ui/request_status.dart';
+import 'package:scraplapl/facade/supaip/supaip_scrapping.dart';
 import 'package:scraplapl/facade/supaip/supaip_parsing.dart';
-import 'package:scraplapl/ui/account_dialog.dart';
+import 'package:scraplapl/ui/account/account_dialog.dart';
 import 'package:scraplapl/ui/azba/azba_map.dart';
-import 'package:scraplapl/facade/azba/scrapping_azba.dart';
+import 'package:scraplapl/facade/azba/azba_scrapping.dart';
 import 'package:scraplapl/ui/fuel/fuel_page.dart';
 import 'package:scraplapl/ui/perfo/perfo_page.dart';
 import 'package:scraplapl/tools.dart';
-
-import 'facade/notam/scrapping_Notam.dart';
-import 'facade/weather/scrapping.dart';
-import 'ui/supaip/table_supaip.dart';
+import 'package:scraplapl/facade/notam/notam_scrapping.dart';
+import 'package:scraplapl/facade/weather/weather_scrapping.dart';
+import 'package:scraplapl/ui/supaip/table_supaip.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override

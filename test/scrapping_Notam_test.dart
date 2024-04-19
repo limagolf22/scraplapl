@@ -1,5 +1,5 @@
 import 'package:scraplapl/main.dart';
-import 'package:scraplapl/facade/notam/scrapping_Notam.dart';
+import 'package:scraplapl/facade/notam/notam_scrapping.dart';
 import 'package:test/test.dart';
 
 void main() {

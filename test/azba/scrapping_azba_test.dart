@@ -1,4 +1,4 @@
-import 'package:scraplapl/facade/azba/scrapping_azba.dart';
+import 'package:scraplapl/facade/azba/azba_scrapping.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -34,7 +34,7 @@ void main() {
     });
 
     test('test get all Azba test content', () async {
-      int res = await scrapPdfAllAzba("LFXX","LFXY");
+      int res = await scrapPdfAllAzba("LFXX", "LFXY");
       expect(res, equals(0));
     });
   });
