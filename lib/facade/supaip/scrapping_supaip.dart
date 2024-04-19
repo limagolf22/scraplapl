@@ -8,12 +8,12 @@ import 'package:requests/requests.dart';
 import 'package:scraplapl/facade/supaip/supaip_parsing.dart';
 import 'package:scraplapl/ui/supaip/table_supaip.dart';
 
-final Set<String> FIRs =
-    Set.unmodifiable({'LFBB', 'LFRR', 'LFMM', 'LFFF', 'LFEE'});
+final Set<String> FIRs = {'LFFF', 'LFBB', 'LFRR', 'LFMM', 'LFEE'};
 
 var loggerSupAip = Logger();
 
 Future<int> retrieveAllSupAips(DateTime instant) async {
+  supAips = [];
   return (await Future.wait(FIRs.map((fir) => scrapSupAips(instant, fir))))
       .reduce((a, b) => a + b);
 }
@@ -27,9 +27,8 @@ Future<int> scrapSupAips(DateTime instant, String fir) async {
     return 1;
   }
 
-  supAips = parseAllSupAip(parseSupAipStringAsHtml(res))
-      .where((sa) => sa.isActive(instant) || sa.isActive(instantAfterDay))
-      .toList();
+  supAips.addAll(parseAllSupAip(parseSupAipStringAsHtml(res), fir)
+      .where((sa) => sa.isActive(instant) || sa.isActive(instantAfterDay)));
   return 0;
 }
 

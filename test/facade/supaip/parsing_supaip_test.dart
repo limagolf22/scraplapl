@@ -84,9 +84,10 @@ void main() {
 ''');
       var oth = htmlTrElement.querySelectorAll('tr.tr_ligne_document')[0];
       expect(
-          parseSupAip(oth).toString(),
+          parseSupAip(oth, 'LFBB').toString(),
           equals(SupAip(
                   "073/2024",
+                  'LFBB',
                   "Modification AIP France AD2 LFRK relative aux procédures RWY31 ILS LOC Y et Z",
                   DateTimeRange(
                       start: DateTime(2024, 05, 16),
