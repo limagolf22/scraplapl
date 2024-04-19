@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' hide Path;
 import 'package:scraplapl/kernel/azba/azba_coord.dart';
+import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/ui/azba/azba_utils.dart';
 import 'package:scraplapl/kernel/azba/azba_zone.dart';
 import 'package:polylabel/polylabel.dart';
 import 'dart:math';
-
-List<AzbaZone> azbaZones = [];
-List<DateTime> activationsTimes = [];
 
 void changeAzbaZone(List<AzbaZone> _azbaZones) {
   var now = DateTime.now();

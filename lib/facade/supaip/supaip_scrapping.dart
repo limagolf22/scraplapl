@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:requests/requests.dart';
 import 'package:scraplapl/facade/supaip/supaip_parsing.dart';
-import 'package:scraplapl/ui/supaip/table_supaip.dart';
+import 'package:scraplapl/kernel/store/stores.dart';
 
 final Set<String> FIRs = {'LFFF', 'LFBB', 'LFRR', 'LFMM', 'LFEE'};
 

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/ui/request_status.dart';
 import 'package:scraplapl/facade/supaip/supaip_scrapping.dart';
 import 'package:scraplapl/facade/supaip/supaip_pdf.dart';
 import 'package:scraplapl/kernel/supaip/supaip_model.dart';
 import 'package:scraplapl/main.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-List<SupAip> supAips = [];
 
 class SupAipTable extends StatefulWidget {
   @override

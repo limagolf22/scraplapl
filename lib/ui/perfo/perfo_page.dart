@@ -1,27 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scraplapl/kernel/airplane/perfo.dart';
+import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/main.dart';
 import 'package:scraplapl/ui/formatter.dart';
 import 'package:scraplapl/ui/perfo/ResizableImage.dart';
 import 'package:scraplapl/facade/airplane/airplane_pdf_generation.dart';
-
-const headerPerfsInputs = ["alti(ft)", "T(°C)", "vent(kts)", "herbe"];
-const headerPerfsOutputs = ["TOD", "TODA", "LD", "LDA"];
-
-List<String> airportsPerfs = ["", "", "", ""];
-
-List<Map<String, String>> perfsInputs = [
-  {for (var h in headerPerfsInputs) h: ""},
-  {for (var h in headerPerfsInputs) h: ""},
-  {for (var h in headerPerfsInputs) h: ""},
-  {for (var h in headerPerfsInputs) h: ""}
-];
-
-List<Map<String, String>> perfsResults = [
-  {for (var h in headerPerfsOutputs) h: ""},
-  {for (var h in headerPerfsOutputs) h: ""},
-  {for (var h in headerPerfsOutputs) h: ""},
-  {for (var h in headerPerfsOutputs) h: ""}
-];
 
 class PerfoPage extends StatelessWidget {
   const PerfoPage({super.key});

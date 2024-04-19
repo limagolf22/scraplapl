@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:process_runner/process_runner.dart';
+import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/ui/formatter.dart';
 import 'package:scraplapl/ui/request_status.dart';
 import 'package:scraplapl/facade/supaip/supaip_scrapping.dart';

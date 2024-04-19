@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:scraplapl/kernel/airplane/fuel.dart';
+import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/main.dart';
 import 'package:scraplapl/facade/airplane/airplane_pdf_generation.dart';
 import 'package:scraplapl/ui/perfo/perfo_page.dart';
-
-const headersConso = [
-  "taxi",
-  "vol",
-  "app",
-  "reroute",
-  "marge",
-  "final reserve",
-  "supplément",
-];
-
-var consoContentold = List<int>.generate(headersConso.length, (index) => 0);
-var consoContent = {for (var k in headersConso) k: 0};
 
 class FuelPage extends StatefulWidget {
   const FuelPage({super.key});

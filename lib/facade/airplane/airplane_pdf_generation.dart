@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:scraplapl/ui/fuel/fuel_page.dart';
+import 'package:scraplapl/kernel/airplane/fuel.dart';
+import 'package:scraplapl/kernel/airplane/perfo.dart';
+import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/main.dart';
 import 'package:scraplapl/tools.dart';
-import 'package:scraplapl/ui/perfo/perfo_page.dart';
 
 createPerfoPDF(List<String> arpts) async {
   final pdf = pw.Document();
