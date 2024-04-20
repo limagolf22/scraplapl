@@ -29,18 +29,20 @@ class _FuelPageState extends State<FuelPage> {
               Table(
                   border: TableBorder.all(),
                   defaultColumnWidth: const IntrinsicColumnWidth(),
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   children: headersConso
                           .map((h) => TableRow(children: [
-                                createCell(Text(
+                                createCell(Center(
+                                    child: Text(
                                   h,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
-                                )),
+                                ))),
                                 ConstrainedBox(
                                     constraints:
                                         const BoxConstraints(minWidth: 60),
                                     child: createCell(TextFormField(
-                                        style: const TextStyle(fontSize: 10),
+                                        style: const TextStyle(fontSize: 12),
                                         textAlign: TextAlign.center,
                                         keyboardType: TextInputType.number,
                                         controller: TextEditingController()
@@ -64,14 +66,15 @@ class _FuelPageState extends State<FuelPage> {
                           .toList() +
                       [
                         TableRow(children: [
-                          createCell(const Text(
+                          createCell(const Center(
+                              child: const Text(
                             "TOTAL",
                             style: TextStyle(fontWeight: FontWeight.bold),
-                          )),
+                          ))),
                           createCell(Text(
                             totalFuel.toString(),
                             style: const TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
+                                fontSize: 16, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ))
                         ])
@@ -79,13 +82,16 @@ class _FuelPageState extends State<FuelPage> {
               Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 25, horizontal: 0),
-                  child: TextButton(
+                  child: ElevatedButton(
                       onPressed: () {
                         if (depArpt != "" && arrArpt != "") {
                           createConsoPDF([depArpt, arrArpt]);
                         }
                       },
-                      child: const Text("Valider")))
+                      child: const Text(
+                        "Valider",
+                        style: const TextStyle(fontSize: 16),
+                      )))
             ],
           ),
         )));

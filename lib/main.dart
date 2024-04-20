@@ -68,7 +68,6 @@ class _MainRouteState extends State<MainRoute> {
   void initState() {
     super.initState();
 
-    // simply use this
     Timer.run(() {
       if (personalFolder == "default") {
         open_login_dialog(context);
@@ -126,155 +125,161 @@ class _MainRouteState extends State<MainRoute> {
             )
           ],
         ),
-        body:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          TextFormField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.text,
-              textCapitalization: TextCapitalization.characters,
-              inputFormatters: [UpperCaseTextFormatter()],
-              validator: validateICAO,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              onChanged: (value) {
-                depArpt = value.toUpperCase();
-                resetAllStatus();
-              },
-              controller: TextEditingController()..text = depArpt,
-              decoration: const InputDecoration(labelText: "DEPARTURE")),
-          TextFormField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.text,
-              textCapitalization: TextCapitalization.characters,
-              inputFormatters: [UpperCaseTextFormatter()],
-              validator: validateICAO,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              onChanged: (value) {
-                arrArpt = value.toUpperCase();
-                resetAllStatus();
-              },
-              controller: TextEditingController()..text = arrArpt,
-              decoration: const InputDecoration(labelText: "ARRIVAL")),
-          TextFormField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.text,
-              textCapitalization: TextCapitalization.characters,
-              inputFormatters: [UpperCaseTextFormatter()],
-              validator: validateICAO,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              onChanged: (value) {
-                rerouting1 = value.toUpperCase();
-                resetAllStatus();
-              },
-              controller: TextEditingController()..text = rerouting1,
-              decoration: const InputDecoration(labelText: "Rerouting1")),
-          TextFormField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.text,
-              textCapitalization: TextCapitalization.characters,
-              inputFormatters: [UpperCaseTextFormatter()],
-              validator: validateICAO,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              onChanged: (value) {
-                rerouting2 = value.toUpperCase();
-                resetAllStatus();
-              },
-              controller: TextEditingController()..text = rerouting2,
-              decoration: const InputDecoration(labelText: "Rerouting2")),
-          DropdownButton<String>(
-            value: chosenAircraft,
-            icon: const Icon(Icons.arrow_downward),
-            elevation: 16,
-            style: const TextStyle(color: Colors.deepPurple),
-            underline: Container(
-              height: 2,
-              color: Colors.deepPurpleAccent,
-            ),
-            onChanged: (String? value) {
-              // This is called when the user selects an item.
-              setState(() {
-                chosenAircraft = value!;
-              });
-            },
-            items: PLANE_TYPES.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            TextButton(
-              child: const Text("upload datas (Notam+Weather+AZBA)"),
-              onPressed: () async {
-                var date =
-                    DateTime.now().toUtc().add(const Duration(minutes: 5));
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextFormField(
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [UpperCaseTextFormatter()],
+                  validator: validateICAO,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  onChanged: (value) {
+                    depArpt = value.toUpperCase();
+                    resetAllStatus();
+                  },
+                  controller: TextEditingController()..text = depArpt,
+                  decoration: const InputDecoration(labelText: "DEPARTURE")),
+              TextFormField(
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [UpperCaseTextFormatter()],
+                  validator: validateICAO,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  onChanged: (value) {
+                    arrArpt = value.toUpperCase();
+                    resetAllStatus();
+                  },
+                  controller: TextEditingController()..text = arrArpt,
+                  decoration: const InputDecoration(labelText: "ARRIVAL")),
+              TextFormField(
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [UpperCaseTextFormatter()],
+                  validator: validateICAO,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  onChanged: (value) {
+                    rerouting1 = value.toUpperCase();
+                    resetAllStatus();
+                  },
+                  controller: TextEditingController()..text = rerouting1,
+                  decoration: const InputDecoration(labelText: "Rerouting1")),
+              TextFormField(
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [UpperCaseTextFormatter()],
+                  validator: validateICAO,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  onChanged: (value) {
+                    rerouting2 = value.toUpperCase();
+                    resetAllStatus();
+                  },
+                  controller: TextEditingController()..text = rerouting2,
+                  decoration: const InputDecoration(labelText: "Rerouting2")),
+              DropdownButton<String>(
+                value: chosenAircraft,
+                icon: const Icon(Icons.arrow_downward),
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String? value) {
+                  // This is called when the user selects an item.
+                  setState(() {
+                    chosenAircraft = value!;
+                  });
+                },
+                items:
+                    PLANE_TYPES.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                ElevatedButton(
+                  child: const Text("upload datas (Notam+Weather+AZBA)"),
+                  onPressed: () async {
+                    var date =
+                        DateTime.now().toUtc().add(const Duration(minutes: 5));
 
-                Future<int> exitCodeNotam = getPdfNotamSofia(
-                    [depArpt, arrArpt, rerouting1, rerouting2]
-                        .where((arpt) => AppUtil.isICAO(arpt))
-                        .toList(),
-                    "${date.year}/${add0(date.month)}/${add0(date.day)}",
-                    "${add0(date.hour)}:${add0(date.minute)}");
+                    Future<int> exitCodeNotam = getPdfNotamSofia(
+                        [depArpt, arrArpt, rerouting1, rerouting2]
+                            .where((arpt) => AppUtil.isICAO(arpt))
+                            .toList(),
+                        "${date.year}/${add0(date.month)}/${add0(date.day)}",
+                        "${add0(date.hour)}:${add0(date.minute)}");
 
-                Future<int> exitCodeWeather =
-                    getPdfWeather(depArpt, arrArpt, 40);
+                    Future<int> exitCodeWeather =
+                        getPdfWeather(depArpt, arrArpt, 40);
 
-                Future<int> exitCodeAzba = scrapPdfAllAzba(depArpt, arrArpt);
+                    Future<int> exitCodeAzba =
+                        scrapPdfAllAzba(depArpt, arrArpt);
 
-                Future<int> exitCodeSupAip = retrieveAllSupAips(date);
+                    Future<int> exitCodeSupAip = retrieveAllSupAips(date);
 
-                List<int> mergeRes = (await Future.wait([
-                  exitCodeNotam,
-                  exitCodeWeather,
-                  exitCodeAzba,
-                  exitCodeSupAip
-                ]));
-                setState(() {
-                  scrappingNotamStatus = mergeRes[0] == 0
-                      ? RequestStatus.SUCCESS
-                      : RequestStatus.FAIL;
-                  scrappingWeatherStatus = mergeRes[1] == 0
-                      ? RequestStatus.SUCCESS
-                      : RequestStatus.FAIL;
-                  azbaStatus = mergeRes[2] == 0
-                      ? RequestStatus.SUCCESS
-                      : RequestStatus.FAIL;
-                  supAipStatus = mergeRes[3] == 0
-                      ? RequestStatus.SUCCESS
-                      : RequestStatus.FAIL;
-                });
-              },
-            ),
-            iconRequestStatus(scrappingNotamStatus, "Notam scrapping status"),
-            iconRequestStatus(
-                scrappingWeatherStatus, "Weather scrapping status"),
-            iconRequestStatus(azbaStatus, "Azba scrapping status"),
-            iconRequestStatus(supAipStatus, "SupAip scrapping status")
-          ]),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            TextButton(
-                child: const Text("merge pdf"),
-                onPressed: () async {
-                  var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-                  logger.d(dir);
-                  List<String> selectedPDFs = [];
-                  for (var p in [
-                        "$dir/MTO_$depArpt-$arrArpt.pdf",
-                        "$dir/NotamSofia_$depArpt-$arrArpt.pdf",
-                        "$dir/Azba_$depArpt-$arrArpt.pdf",
-                        "$dir/Conso_$depArpt-$arrArpt.pdf",
-                        "$dir/Perfo_$depArpt-$arrArpt.pdf"
-                      ] +
-                      supAips
-                          .map((sa) => "$dir/SupAip_${adaptSupAipId(sa)}.pdf")
-                          .toList()) {
-                    if (File(p).existsSync()) {
-                      logger.d("path exists : " + p);
-                      selectedPDFs.add(p);
-                    }
-                    ;
-                  }
-                  /*        MergeMultiplePDFResponse response =
+                    List<int> mergeRes = (await Future.wait([
+                      exitCodeNotam,
+                      exitCodeWeather,
+                      exitCodeAzba,
+                      exitCodeSupAip
+                    ]));
+                    setState(() {
+                      scrappingNotamStatus = mergeRes[0] == 0
+                          ? RequestStatus.SUCCESS
+                          : RequestStatus.FAIL;
+                      scrappingWeatherStatus = mergeRes[1] == 0
+                          ? RequestStatus.SUCCESS
+                          : RequestStatus.FAIL;
+                      azbaStatus = mergeRes[2] == 0
+                          ? RequestStatus.SUCCESS
+                          : RequestStatus.FAIL;
+                      supAipStatus = mergeRes[3] == 0
+                          ? RequestStatus.SUCCESS
+                          : RequestStatus.FAIL;
+                    });
+                  },
+                ),
+                iconRequestStatus(
+                    scrappingNotamStatus, "Notam scrapping status"),
+                iconRequestStatus(
+                    scrappingWeatherStatus, "Weather scrapping status"),
+                iconRequestStatus(azbaStatus, "Azba scrapping status"),
+                iconRequestStatus(supAipStatus, "SupAip scrapping status")
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                ElevatedButton(
+                    child: const Text("merge pdf"),
+                    onPressed: () async {
+                      var dir = await AppUtil.createFolderInAppDocDir('pdfs');
+                      logger.d(dir);
+                      List<String> selectedPDFs = [];
+                      for (var p in [
+                            "$dir/MTO_$depArpt-$arrArpt.pdf",
+                            "$dir/NotamSofia_$depArpt-$arrArpt.pdf",
+                            "$dir/Azba_$depArpt-$arrArpt.pdf",
+                            "$dir/Conso_$depArpt-$arrArpt.pdf",
+                            "$dir/Perfo_$depArpt-$arrArpt.pdf"
+                          ] +
+                          supAips
+                              .map((sa) =>
+                                  "$dir/SupAip_${adaptSupAipId(sa)}.pdf")
+                              .toList()) {
+                        if (File(p).existsSync()) {
+                          logger.d("path exists : " + p);
+                          selectedPDFs.add(p);
+                        }
+                        ;
+                      }
+                      /*        MergeMultiplePDFResponse response =
                     await PdfMerger.mergeMultiplePDF(
                         paths: selectedPDFs,
                         outputDirPath:
@@ -282,30 +287,31 @@ class _MainRouteState extends State<MainRoute> {
 
                 print(response.status);
                 */
-                  ProcessRunner processRunner = ProcessRunner();
-                  ProcessRunnerResult result = await processRunner.runProcess(
-                      ['./pdftk/pdftk.exe'] +
-                          selectedPDFs +
-                          [
-                            'cat',
-                            'output',
-                            'Merged_${personalFolder}_$depArpt-$arrArpt.pdf'
-                          ],
-                      runInShell: false);
-                  if (result.exitCode == 0) {
-                    logger.i("merge is done succesfully");
-                  } else {
-                    logger.w("failed to merge");
-                  }
-                  setState(() {
-                    mergeStatus = result.exitCode == 0
-                        ? RequestStatus.SUCCESS
-                        : RequestStatus.FAIL;
-                  });
-                }),
-            iconRequestStatus(mergeStatus, "Pdf Merge Status")
-          ])
-        ]));
+                      ProcessRunner processRunner = ProcessRunner();
+                      ProcessRunnerResult result =
+                          await processRunner.runProcess(
+                              ['./pdftk/pdftk.exe'] +
+                                  selectedPDFs +
+                                  [
+                                    'cat',
+                                    'output',
+                                    'Merged_${personalFolder}_$depArpt-$arrArpt.pdf'
+                                  ],
+                              runInShell: false);
+                      if (result.exitCode == 0) {
+                        logger.i("merge is done succesfully");
+                      } else {
+                        logger.w("failed to merge");
+                      }
+                      setState(() {
+                        mergeStatus = result.exitCode == 0
+                            ? RequestStatus.SUCCESS
+                            : RequestStatus.FAIL;
+                      });
+                    }),
+                iconRequestStatus(mergeStatus, "Pdf Merge Status")
+              ])
+            ]));
   }
 
   void resetAllStatus() {
@@ -334,7 +340,8 @@ Widget iconRequestStatus(RequestStatus reqStatus, String tooltip) {
     case RequestStatus.UNDONE:
       return Tooltip(
           message: tooltip,
-          child: Icon(Icons.change_circle_outlined, color: Colors.transparent));
+          child:
+              null); //Icon(Icons.change_circle_outlined, color: Colors.transparent));
     case RequestStatus.SUCCESS:
       return Tooltip(
           message: tooltip,

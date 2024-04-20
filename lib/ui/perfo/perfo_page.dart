@@ -135,7 +135,7 @@ Widget perfoFormWidget(int i) {
     ),
     Padding(
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 0),
-        child: TextButton(
+        child: ElevatedButton(
             onPressed: () {
               if (depArpt != "" && arrArpt != "") {
                 createPerfoPDF([depArpt, arrArpt]);
