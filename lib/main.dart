@@ -3,14 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:process_runner/process_runner.dart';
-import 'package:scraplapl/kernel/store/stores.dart';
+import 'package:scraplapl/facade/merge/merge_pdfs.dart';
+import 'package:scraplapl/ui/azba/azba_page.dart';
 import 'package:scraplapl/ui/formatter.dart';
 import 'package:scraplapl/ui/request_status.dart';
 import 'package:scraplapl/facade/supaip/supaip_scrapping.dart';
-import 'package:scraplapl/facade/supaip/supaip_parsing.dart';
 import 'package:scraplapl/ui/account/account_dialog.dart';
-import 'package:scraplapl/ui/azba/azba_map.dart';
 import 'package:scraplapl/facade/azba/azba_scrapping.dart';
 import 'package:scraplapl/ui/fuel/fuel_page.dart';
 import 'package:scraplapl/ui/perfo/perfo_page.dart';
@@ -42,10 +40,11 @@ String rerouting1 = "";
 String rerouting2 = "";
 
 final PLANE_TYPES = {"DR400-120", "DR400-140B", "TB10"};
-
 String chosenAircraft = PLANE_TYPES.first;
 
 String personalFolder = "default";
+
+Logger logger = new Logger();
 
 class MainRoute extends StatefulWidget {
   const MainRoute({super.key});
@@ -61,8 +60,6 @@ class _MainRouteState extends State<MainRoute> {
   RequestStatus supAipStatus = RequestStatus.UNDONE;
 
   RequestStatus mergeStatus = RequestStatus.UNDONE;
-
-  Logger logger = new Logger();
 
   @override
   void initState() {
@@ -109,7 +106,7 @@ class _MainRouteState extends State<MainRoute> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AzbaMapWidget()),
+                  MaterialPageRoute(builder: (context) => AzbaPageWidget()),
                 );
               },
             ),
@@ -125,10 +122,11 @@ class _MainRouteState extends State<MainRoute> {
             )
           ],
         ),
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+        body: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
               TextFormField(
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.text,
@@ -205,8 +203,12 @@ class _MainRouteState extends State<MainRoute> {
                 }).toList(),
               ),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                iconRequestStatus(
+                    scrappingNotamStatus, "Notam scrapping status"),
+                iconRequestStatus(
+                    scrappingWeatherStatus, "Weather scrapping status"),
                 ElevatedButton(
-                  child: const Text("upload datas (Notam+Weather+AZBA)"),
+                  child: const Text("upload datas"),
                   onPressed: () async {
                     var date =
                         DateTime.now().toUtc().add(const Duration(minutes: 5));
@@ -248,70 +250,16 @@ class _MainRouteState extends State<MainRoute> {
                     });
                   },
                 ),
-                iconRequestStatus(
-                    scrappingNotamStatus, "Notam scrapping status"),
-                iconRequestStatus(
-                    scrappingWeatherStatus, "Weather scrapping status"),
                 iconRequestStatus(azbaStatus, "Azba scrapping status"),
                 iconRequestStatus(supAipStatus, "SupAip scrapping status")
               ]),
+              SizedBox(height: 5),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 ElevatedButton(
-                    child: const Text("merge pdf"),
-                    onPressed: () async {
-                      var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-                      logger.d(dir);
-                      List<String> selectedPDFs = [];
-                      for (var p in [
-                            "$dir/MTO_$depArpt-$arrArpt.pdf",
-                            "$dir/NotamSofia_$depArpt-$arrArpt.pdf",
-                            "$dir/Azba_$depArpt-$arrArpt.pdf",
-                            "$dir/Conso_$depArpt-$arrArpt.pdf",
-                            "$dir/Perfo_$depArpt-$arrArpt.pdf"
-                          ] +
-                          supAips
-                              .map((sa) =>
-                                  "$dir/SupAip_${adaptSupAipId(sa)}.pdf")
-                              .toList()) {
-                        if (File(p).existsSync()) {
-                          logger.d("path exists : " + p);
-                          selectedPDFs.add(p);
-                        }
-                        ;
-                      }
-                      /*        MergeMultiplePDFResponse response =
-                    await PdfMerger.mergeMultiplePDF(
-                        paths: selectedPDFs,
-                        outputDirPath:
-                            AppUtil.extDir + "/merged_$depArpt-$arrArpt.pdf");
-
-                print(response.status);
-                */
-                      ProcessRunner processRunner = ProcessRunner();
-                      ProcessRunnerResult result =
-                          await processRunner.runProcess(
-                              ['./pdftk/pdftk.exe'] +
-                                  selectedPDFs +
-                                  [
-                                    'cat',
-                                    'output',
-                                    'Merged_${personalFolder}_$depArpt-$arrArpt.pdf'
-                                  ],
-                              runInShell: false);
-                      if (result.exitCode == 0) {
-                        logger.i("merge is done succesfully");
-                      } else {
-                        logger.w("failed to merge");
-                      }
-                      setState(() {
-                        mergeStatus = result.exitCode == 0
-                            ? RequestStatus.SUCCESS
-                            : RequestStatus.FAIL;
-                      });
-                    }),
+                    child: const Text("merge pdf"), onPressed: mergePdfPressed),
                 iconRequestStatus(mergeStatus, "Pdf Merge Status")
               ])
-            ]));
+            ])));
   }
 
   void resetAllStatus() {
@@ -328,6 +276,13 @@ class _MainRouteState extends State<MainRoute> {
         mergeStatus = RequestStatus.UNDONE;
       });
     }
+  }
+
+  void mergePdfPressed() async {
+    int res = await mergeAllPdfs(depArpt, arrArpt, personalFolder);
+    setState(() {
+      mergeStatus = res == 0 ? RequestStatus.SUCCESS : RequestStatus.FAIL;
+    });
   }
 }
 

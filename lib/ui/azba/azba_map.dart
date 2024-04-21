@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' hide Path;
+import 'package:logger/logger.dart';
 import 'package:scraplapl/kernel/azba/azba_coord.dart';
 import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/ui/azba/azba_utils.dart';
-import 'package:scraplapl/kernel/azba/azba_zone.dart';
 import 'package:polylabel/polylabel.dart';
 import 'dart:math';
 
-void changeAzbaZone(List<AzbaZone> _azbaZones) {
-  var now = DateTime.now();
-  azbaZones = _azbaZones;
-  activationsTimes = [now] +
-      azbaZones
-          .map((az) => az.getActivationStarts().union(az.getActivationEnds()))
-          .expand((e) => e)
-          .where((dt) => dt.isAfter(now))
-          .toSet()
-          .toList();
-  activationsTimes
-      .sort((a, b) => a.millisecondsSinceEpoch - b.millisecondsSinceEpoch);
-}
+const LAT45COEF = 0.707;
 
 class AzbaMapWidget extends StatefulWidget {
+  final DateTime dateTime;
+
+  AzbaMapWidget(this.dateTime);
+
   @override
   State<StatefulWidget> createState() {
     return _AzbaMapWidgetState();
@@ -29,59 +21,25 @@ class AzbaMapWidget extends StatefulWidget {
 }
 
 class _AzbaMapWidgetState extends State<AzbaMapWidget> {
-  int _forecastTime = 0;
+  var azbaMapLogger = Logger();
 
   @override
   Widget build(BuildContext context) {
-    var dateTimeNow = DateTime.now().toUtc();
-    if (activationsTimes.isNotEmpty) {
-      if (_forecastTime < 0) {
-        _forecastTime += activationsTimes.length;
-      }
-    }
-    var dateTime = activationsTimes.isNotEmpty
-        ? activationsTimes[_forecastTime % activationsTimes.length]
-        : dateTimeNow.add(Duration(hours: _forecastTime));
-    print("build azba map with : " + dateTime.toIso8601String());
+    var parentSize = MediaQuery.of(context).size;
 
-    List<Widget> widgets = [
+    var widthSize = min(parentSize.height * LAT45COEF, parentSize.width);
+
+    return Stack(
+        children: [
       CustomPaint(
           painter: ContourPainter(franceContour),
-          size: Size((MediaQuery.of(context).size.height - 48) * 0.707 * 0.9,
-              (MediaQuery.of(context).size.height - 48) * 0.9))
-    ];
-    widgets.addAll(azbaZones
-        .map((az) => CustomPaint(
-            painter: PolygonPainter(az.type + ' ' + az.name, az.coordinates,
-                az.isAzbaActive(dateTime)),
-            size: Size((MediaQuery.of(context).size.height - 48) * 0.707 * 0.9,
-                (MediaQuery.of(context).size.height - 48) * 0.9)))
-        .toList());
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('AZBA Map'),
-      ),
-      body: Column(children: [
-        Row(children: [
-          TextButton(onPressed: decreaseForecastTime, child: const Text("-")),
-          TextButton(onPressed: increaseForecastTime, child: const Text("+")),
-          Text("Instant : ${dateTime.toIso8601String()}")
-        ]),
-        Stack(children: widgets)
-      ]),
-    );
-  }
-
-  void increaseForecastTime() {
-    setState(() {
-      _forecastTime++;
-    });
-  }
-
-  void decreaseForecastTime() {
-    setState(() {
-      _forecastTime--;
-    });
+          size: Size(widthSize * 0.99, widthSize / LAT45COEF * 0.99))
+    ]
+            .followedBy((azbaZones.map((az) => CustomPaint(
+                painter: PolygonPainter(az.type + ' ' + az.name, az.coordinates,
+                    az.isAzbaActive(widget.dateTime)),
+                size: Size(widthSize * 0.99, widthSize / LAT45COEF * 0.99)))))
+            .toList());
   }
 }
 

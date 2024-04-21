@@ -84,7 +84,7 @@ Widget perfoFormWidget(int i) {
                       labelText: "TOD",
                       constraints: BoxConstraints(maxWidth: 100),
                       filled: true,
-                      fillColor: Colors.lightBlueAccent)),
+                      fillColor: Colors.lightBlueAccent.shade100)),
               TextFormField(
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
@@ -97,7 +97,7 @@ Widget perfoFormWidget(int i) {
                       labelText: "TODA",
                       constraints: BoxConstraints(maxWidth: 100),
                       filled: true,
-                      fillColor: Colors.lightBlue))
+                      fillColor: Colors.lightBlue.shade100))
             ],
           ),
           Column(
@@ -114,7 +114,7 @@ Widget perfoFormWidget(int i) {
                       labelText: "LD",
                       constraints: BoxConstraints(maxWidth: 100),
                       filled: true,
-                      fillColor: Colors.lightGreenAccent)),
+                      fillColor: Colors.lightGreenAccent.shade100)),
               TextFormField(
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
@@ -127,7 +127,7 @@ Widget perfoFormWidget(int i) {
                       labelText: "LDA",
                       constraints: BoxConstraints(maxWidth: 100),
                       filled: true,
-                      fillColor: Colors.lightGreen))
+                      fillColor: Colors.lightGreen.shade100))
             ],
           )
         ])

@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:requests/requests.dart';
-import 'package:scraplapl/tools.dart';
+import 'package:scraplapl/kernel/store/stores.dart';
 
 Future<int> getPdfNotamSofia(
     List<String> airports, String date, String heure) async {
@@ -80,13 +78,11 @@ Future<int> getPdfNotamSofia(
   http.Response resPdf =
       await http.post(urlPdf, headers: headersPdf, body: dataPdf);
   if (resPdf.success) {
-    String dir = await AppUtil.createFolderInAppDocDir('pdfs');
-    File file = File("$dir/NotamSofia_${airports[0]}-${airports[1]}.pdf");
-    await file.writeAsBytes(resPdf.bodyBytes);
-    loggerNotam.i("Notam Sofia Pdf written");
+    pdfDownloads['Notam'] = resPdf.bodyBytes;
+    loggerNotam.i("Notam Sofia Pdf bytes downloaded");
     return 0;
   } else {
-    loggerNotam.w("Failed to get Notam Sofia");
+    loggerNotam.w("Failed to download Notam Sofia");
     return 1;
   }
 }

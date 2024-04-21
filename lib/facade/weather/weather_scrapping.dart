@@ -1,9 +1,13 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
 import 'dart:io';
+import 'package:logger/logger.dart';
 import 'package:requests/requests.dart';
 import 'package:http/http.dart' as http;
+import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/tools.dart';
+
+var loggerWeather = Logger();
 
 Future<int> getPdfWeather(dep, arr, int fl) async {
   //FlutterSession session = FlutterSession();
@@ -19,22 +23,17 @@ Future<int> getPdfWeather(dep, arr, int fl) async {
 
   var r = await Requests.get(getURL);
   if (r.content() != "ko") {
-    print("MTO pdf captured");
     String pdfURL =
         "https://aviation.meteo.fr/dossier_personnalise_show_pdf.php?id_recent_ordre=1&id=${r.content()}&origine=recents";
     var pdfRes = await Requests.get(pdfURL);
-    var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-    File file = File("${dir}/MTO_$dep-$arr.pdf");
-    await file.writeAsBytes(pdfRes.bodyBytes);
-    // pdfRes.bodyBytes
-    // pdfFile = open("MTO_"+dep+"-"+arr+".pdf", 'wb')
-    // pdfFile.write(pdfRes.content)
-    // pdfFile.close()
-    return 0;
-  } else {
-    print("MTO pdf failed to be captured");
-    return 1;
+    if (pdfRes.success) {
+      pdfDownloads['Weather'] = pdfRes.bodyBytes;
+      loggerWeather.i("Weather Pdf bytes downloaded");
+      return 0;
+    }
   }
+  loggerWeather.w("MTO pdf failed to be captured");
+  return 1;
 }
 
 @Deprecated('Worked with the old notamWeb website')

@@ -9,7 +9,7 @@ import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/tools.dart';
 import 'package:scraplapl/ui/azba/azba_utils.dart';
 
-createAzbaPDF(String dep, String arr) async {
+saveAzbaPDF(String dep, String arr) async {
   final pdf = pw.Document();
 
   pw.Widget widgetContour = generateFranceContour(franceContour

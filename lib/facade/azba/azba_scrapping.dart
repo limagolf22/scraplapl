@@ -3,9 +3,8 @@ import 'package:logger/logger.dart';
 import 'package:requests/requests.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:scraplapl/facade/azba/azba_pdf.dart';
-import 'package:scraplapl/ui/azba/azba_map.dart';
 import 'package:scraplapl/facade/azba/azba_parsing.dart';
+import 'package:scraplapl/ui/azba/azba_page.dart';
 
 Future<int> scrapPdfAllAzba(String dep, String arr) async {
   var loggerAzba = Logger();
@@ -55,7 +54,6 @@ Future<int> scrapPdfAllAzba(String dep, String arr) async {
   }
 
   changeAzbaZone(parseAllAzbaZone(resultJson));
-  createAzbaPDF(dep, arr);
   return 0;
 }
 
