@@ -9,7 +9,15 @@ import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/tools.dart';
 import 'package:scraplapl/ui/azba/azba_utils.dart';
 
-saveAzbaPDF(String dep, String arr) async {
+Future<void> fileSaveAzbaPDF(String dep, String arr) async {
+  if (pdfDownloads['Azba'] != null && pdfDownloads['Azba']!.isNotEmpty) {
+    var dir = await AppUtil.createFolderInAppDocDir('pdfs');
+    final file = File("$dir/Azba_${dep}-${arr}.pdf");
+    await file.writeAsBytes(pdfDownloads['Azba']!);
+  }
+}
+
+saveAzbaPdf() async {
   final pdf = pw.Document();
 
   pw.Widget widgetContour = generateFranceContour(franceContour
@@ -75,10 +83,7 @@ saveAzbaPDF(String dep, String arr) async {
           ]);
         })); // Page
   }
-
-  var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-  final file = File("$dir/Azba_${dep}-${arr}.pdf");
-  await file.writeAsBytes(await pdf.save());
+  pdfDownloads['Azba'] = await pdf.save();
 }
 
 Point<num> getCenterInPolygon(AzbaZone azbaZone) {

@@ -10,8 +10,9 @@ class AppUtil {
     //Get this App Document Directory
     final Directory _appDocDir = await getApplicationDocumentsDirectory();
     //App Document Directory + folder name
+    final String relPath = (await createPersonalFolder(_appDocDir.path));
     final Directory _appDocDirFolder = Directory(
-        (await createPersonalFolder(_appDocDir.path)) + "/$folderName");
+        relPath + (relPath.endsWith("/") ? "$folderName" : "/$folderName"));
 
     if (await _appDocDirFolder.exists()) {
       //if folder already exists return path
@@ -41,10 +42,11 @@ class AppUtil {
 
   static String extDir = "";
 
-  static Future<void> getDir() async {
+  static Future<String?> getExtDir() async {
     var directory = await getExternalStorageDirectory();
-    extDir = directory!.path;
-    logger.d("External storage dir : " + extDir);
+    logger.d("External storage dir : " +
+        (directory != null ? directory.path : "Storage unavailable"));
+    return directory?.path;
   }
 
   static bool isICAO(String arpt) {

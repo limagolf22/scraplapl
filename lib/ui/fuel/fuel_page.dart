@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scraplapl/facade/airplane/conso_pdf.dart';
 import 'package:scraplapl/kernel/airplane/fuel.dart';
 import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/main.dart';
-import 'package:scraplapl/facade/airplane/airplane_pdf_generation.dart';
 import 'package:scraplapl/ui/perfo/perfo_page.dart';
 
 class FuelPage extends StatefulWidget {

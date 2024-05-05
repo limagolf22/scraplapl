@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scraplapl/facade/airplane/perfo_pdf.dart';
 import 'package:scraplapl/kernel/airplane/perfo.dart';
 import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/main.dart';
 import 'package:scraplapl/ui/formatter.dart';
 import 'package:scraplapl/ui/perfo/ResizableImage.dart';
-import 'package:scraplapl/facade/airplane/airplane_pdf_generation.dart';
 
 class PerfoPage extends StatelessWidget {
   const PerfoPage({super.key});

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:scraplapl/facade/azba/azba_pdf.dart';
 import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/main.dart';
 import 'package:scraplapl/ui/azba/azba_map.dart';
@@ -46,6 +47,13 @@ class _AzbaPageWidgetState extends State<AzbaPageWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text('AZBA Map'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save),
+            tooltip: 'save as pdf',
+            onPressed: saveAzbaPdf,
+          )
+        ],
       ),
       body: Column(children: [
         Row(children: [
@@ -55,13 +63,13 @@ class _AzbaPageWidgetState extends State<AzbaPageWidget> {
                 "<",
                 style: TextStyle(fontSize: 20),
               )),
+          Text(
+            frFormatDateTime(dateTime),
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           ElevatedButton(
               onPressed: increaseForecastTime,
               child: const Text(">", style: TextStyle(fontSize: 20))),
-          Text(
-            "  Instant : " + frFormatDateTime(dateTime),
-            style: TextStyle(fontWeight: FontWeight.bold),
-          )
         ]),
         Expanded(child: AzbaMapWidget(dateTime))
       ]),

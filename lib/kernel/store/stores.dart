@@ -34,5 +34,6 @@ Map<String, Uint8List> pdfDownloads = {
   "Conso": Uint8List(0),
   "Perfo": Uint8List(0),
   "Azba": Uint8List(0),
-  "SupAip": Uint8List(0)
 };
+
+Map<String, Uint8List> pdfDownloadsSupAip = {};
