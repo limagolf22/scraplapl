@@ -22,6 +22,7 @@ jobs:
       - name: Analyze project source
         run: dart analyze
   tests:
+    needs: build
     runs-on: ubuntu-latest
     
     steps:
