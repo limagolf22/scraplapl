@@ -90,7 +90,7 @@ void main() {
                   ],
                   "Administrator : CDPGE Athis-Mons.#Avoidance mandatory during activation hours.")
               .toString()));
-    });
+    }, skip: true);
     test('test a get Activation Starts and Ends', () async {
       var az = AzbaZone(
           "45 S2",

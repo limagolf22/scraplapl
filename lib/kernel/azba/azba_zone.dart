@@ -40,7 +40,7 @@ class AzbaZone {
   }
 
   bool isAzbaActive(DateTime dateTime) {
-    return this.periods.any((p) => isWithin(dateTime, p));
+    return this.periods.any((p) => isWithinWithoutEnd(dateTime, p));
   }
 
   Set<DateTime> getActivationStarts() {
@@ -64,8 +64,15 @@ class AzbaZone {
 }
 
 /**
- * test if a moment is within a period : t in [s;e[
+ * test if a moment is within a period : t in [s;e]
  */
 bool isWithin(DateTime dateTime, DateTimeRange period) {
+  return !period.start.isAfter(dateTime) && !period.end.isBefore(dateTime);
+}
+
+/**
+ * test if a moment is within a period : t in [s;e[
+ */
+bool isWithinWithoutEnd(DateTime dateTime, DateTimeRange period) {
   return !period.start.isAfter(dateTime) && period.end.isAfter(dateTime);
 }
