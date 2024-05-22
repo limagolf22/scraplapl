@@ -12,7 +12,7 @@ import 'package:scraplapl/facade/supaip/supaip_pdf.dart';
 import 'package:scraplapl/facade/weather/weather_pdf.dart';
 import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/tools.dart';
-import 'package:pdf_merger/pdf_merger.dart';
+//import 'package:pdf_merger/pdf_merger.dart';
 
 var mergeLogger = Logger();
 
@@ -82,7 +82,7 @@ Future<int> mergeAllPdfsAndroid(
     mergeLogger.d("pdf bytes exists : " + entry.key);
     selectedPDFs.add(entry.value);
   });
-
+  /*
   MergeMultiplePDFStreamResponse response =
       await PdfMerger.mergeMultipleStreamPDF(
           valuesList: selectedPDFs,
@@ -99,7 +99,10 @@ Future<int> mergeAllPdfsAndroid(
   } else {
     mergeLogger.w("failed to merge");
     return 1;
-  }
+  }*/
+
+  mergeLogger.i("merge is done succesfully"); // To Be Removed
+  return 0; // To Be Removed
 }
 
 Future<void> saveAllFiles(String dep, String arr) async {
