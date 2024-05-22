@@ -21,16 +21,14 @@ jobs:
 
       - name: Analyze project source
         run: dart analyze
-  tests:
-    needs: build
-    runs-on: ubuntu-latest
-    
-    steps:
+
       - run: |
           flutter pub global activate junitreport
           export PATH="$PATH:$HOME/.pub-cache/bin"
+      
       - name: Run tests
         run: flutter test --machine --coverage | tojunit -o report.xml
+      
       - name: Archive code coverage results
         uses: actions/upload-artifact@v4
         with:
