@@ -51,23 +51,18 @@ jobs:
           channel: stable
           version: 3.19.5
       
-      - name: load report dependencies
-        run: |
-          flutter pub global activate junitreport
-          export PATH="$PATH:$HOME/.pub-cache/bin"
-      
       - name: Run tests
-        run: flutter test --machine --coverage | tojunit -o junitReport.xml
+        run: flutter test --machine --coverage > test-results.json
 
       - name: publish test artifacts
         uses: actions/upload-artifact@v4
         with: 
-          name: junitReport
-          path: junitReport.xml
+          name: test-results
+          path: test-results.json
       
-      - name: Publish test report
+      - name: Display test report
         uses: dorny/test-reporter@v1
         with:
           name: JUnit Report
-          path: junitReport.xml
-          reporter: junit
+          path: test-results.json
+          reporter: flutter-json
