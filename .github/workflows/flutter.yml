@@ -7,6 +7,13 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      run-bin:
+        description: 'gen_binaries job'
+        required: true
+        default: 'false'
+        type: boolean
 
 jobs:
   build:
@@ -69,3 +76,36 @@ jobs:
           name: JUnit Report
           path: test-results.json
           reporter: flutter-json
+  gen_binaries:
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ github.event.inputs.run-bin }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.19.5
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache-
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-release
+          path: build/app/outputs/flutter-apk/app-release.apk
