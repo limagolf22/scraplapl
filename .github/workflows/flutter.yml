@@ -52,7 +52,7 @@ jobs:
           version: 3.19.5
       
       - name: Run tests
-        run: flutter test --machine --coverage > test-results.json
+        run: flutter test --machine -r json > test-results.json
 
       - name: publish test artifacts
         uses: actions/upload-artifact@v4
