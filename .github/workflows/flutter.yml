@@ -28,33 +28,44 @@ jobs:
         run: dart analyze
       - name: Cache Flutter dependencies
         uses: actions/cache@v2
+        id: restore-build
         with:
-          path: |
-            ~/.pub-cache
+          path: ~/.pub-cache
           key: ${{ runner.os }}-pub-cache-${{ hashFiles('pubspec.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pub-cache-
   test:
     runs-on: ubuntu-latest
     needs: build
     steps:
-        - name: Cache Flutter dependencies
-          uses: actions/cache@v2
-          with:
-            path: |
-              ~/.pub-cache
-            key: ${{ runner.os }}-pub-cache-${{ hashFiles('pubspec.yaml') }}
-            restore-keys: |
-              ${{ runner.os }}-pub-cache-
-        - run: |
-            flutter pub global activate junitreport
-            export PATH="$PATH:$HOME/.pub-cache/bin"
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('pubspec.yaml') }}
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v3
+        with:
+          channel: stable
+          version: 3.19.5
       
-        - name: Run tests
-          run: flutter test --machine --coverage | tojunit -o report.xml
+      - name: load report dependencies
+        run: |
+          flutter pub global activate junitreport
+          export PATH="$PATH:$HOME/.pub-cache/bin"
       
-        - name: Archive code coverage results
-          uses: actions/upload-artifact@v4
-          with:
-            name: test-report
-            path: report.xml
+      - name: Run tests
+        run: flutter test --machine --coverage | tojunit -o junitReport.xml
+
+      - name: publish test artifacts
+        uses: actions/upload-artifact@v4
+        with: 
+          name: junitReport
+          path: junitReport.xml
+      
+      - name: Publish test report
+        uses: dorny/test-reporter@v1
+        with:
+          name: JUnit Report
+          path: junitReport.xml
+          reporter: junit
