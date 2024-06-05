@@ -36,7 +36,16 @@ jobs:
             ${{ runner.os }}-pub-cache-
   test:
     runs-on: ubuntu-latest
+    needs: build
     steps:
+        - name: Cache Flutter dependencies
+          uses: actions/cache@v2
+          with:
+            path: |
+              ~/.pub-cache
+            key: ${{ runner.os }}-pub-cache-${{ hashFiles('pubspec.yaml') }}
+            restore-keys: |
+              ${{ runner.os }}-pub-cache-
         - run: |
             flutter pub global activate junitreport
             export PATH="$PATH:$HOME/.pub-cache/bin"
