@@ -1,7 +1,12 @@
-name: Flutter
+name: Flutter Pipeline
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -21,16 +26,26 @@ jobs:
 
       - name: Analyze project source
         run: dart analyze
-
-      - run: |
-          flutter pub global activate junitreport
-          export PATH="$PATH:$HOME/.pub-cache/bin"
-      
-      - name: Run tests
-        run: flutter test --machine --coverage | tojunit -o report.xml
-      
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v4
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
         with:
-          name: test-report
-          path: report.xml
+          path: |
+            ~/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache-
+  test:
+    runs-on: ubuntu-latest
+    steps:
+        - run: |
+            flutter pub global activate junitreport
+            export PATH="$PATH:$HOME/.pub-cache/bin"
+      
+        - name: Run tests
+          run: flutter test --machine --coverage | tojunit -o report.xml
+      
+        - name: Archive code coverage results
+          uses: actions/upload-artifact@v4
+          with:
+            name: test-report
+            path: report.xml
