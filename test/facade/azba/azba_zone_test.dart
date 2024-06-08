@@ -50,22 +50,22 @@ void main() {
           {
             "@id": "/api/v2/time_slots/8044",
             "@type": "TimeSlot",
-            "startTime": "2024-04-09T07:30:00+00:00",
-            "endTime": "2024-04-09T10:00:00+00:00"
+            "startTime": "2023-12-08T07:29:00+00:00",
+            "endTime": "2023-12-12T07:29:00+00:00"
+          },
+          {
+            "@id": "/api/v2/time_slots/8044",
+            "@type": "TimeSlot",
+            "startTime": "2023-12-20T07:29:00+00:00",
+            "endTime": "2023-12-22T07:29:00+00:00"
           }
         ],
         "days": [
           {
-            "@id": "/api/v2/days/2152",
-            "@type": "Day",
-            "startDate": "2023-12-08T07:29:00+00:00",
-            "endDate": "2023-12-12T07:29:00+00:00"
-          },
-          {
             "@id": "/api/v2/days/2166",
             "@type": "Day",
-            "startDate": "2023-12-20T07:29:00+00:00",
-            "endDate": "2023-12-22T07:29:00+00:00"
+            "startDate": "2024-04-09T07:30:00+00:00",
+            "endDate": "2024-04-09T10:00:00+00:00"
           }
         ]
       };
@@ -90,7 +90,7 @@ void main() {
                   ],
                   "Administrator : CDPGE Athis-Mons.#Avoidance mandatory during activation hours.")
               .toString()));
-    }, skip: true);
+    }, skip: false);
     test('test a get Activation Starts and Ends', () async {
       var az = AzbaZone(
           "45 S2",
