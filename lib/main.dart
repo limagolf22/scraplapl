@@ -39,12 +39,12 @@ String arrArpt = "";
 String rerouting1 = "";
 String rerouting2 = "";
 
-final PLANE_TYPES = {"DR400-120", "DR400-140B", "TB10"};
-String chosenAircraft = PLANE_TYPES.first;
+const planeTypes = {"DR400-120", "DR400-140B", "TB10"};
+String chosenAircraft = planeTypes.first;
 
 String personalFolder = "default";
 
-Logger logger = new Logger();
+Logger logger = Logger();
 
 class MainRoute extends StatefulWidget {
   const MainRoute({super.key});
@@ -67,7 +67,7 @@ class _MainRouteState extends State<MainRoute> {
 
     Timer.run(() {
       if (personalFolder == "default") {
-        open_login_dialog(context);
+        openLoginDialog(context);
       }
     });
   }
@@ -78,7 +78,7 @@ class _MainRouteState extends State<MainRoute> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('MainPage ' + Directory.current.toString()),
+          title: Text('MainPage ${Directory.current}'),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.oil_barrel_rounded),
@@ -86,7 +86,7 @@ class _MainRouteState extends State<MainRoute> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FuelPage()),
+                  MaterialPageRoute(builder: (context) => const FuelPage()),
                 );
               },
             ),
@@ -106,7 +106,8 @@ class _MainRouteState extends State<MainRoute> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AzbaPageWidget()),
+                  MaterialPageRoute(
+                      builder: (context) => const AzbaPageWidget()),
                 );
               },
             ),
@@ -116,7 +117,7 @@ class _MainRouteState extends State<MainRoute> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SupAipTable()),
+                  MaterialPageRoute(builder: (context) => const SupAipTable()),
                 );
               },
             )
@@ -194,8 +195,7 @@ class _MainRouteState extends State<MainRoute> {
                     chosenAircraft = value!;
                   });
                 },
-                items:
-                    PLANE_TYPES.map<DropdownMenuItem<String>>((String value) {
+                items: planeTypes.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -253,10 +253,10 @@ class _MainRouteState extends State<MainRoute> {
                 iconRequestStatus(azbaStatus, "Azba scrapping status"),
                 iconRequestStatus(supAipStatus, "SupAip scrapping status")
               ]),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 ElevatedButton(
-                    child: const Text("merge pdf"), onPressed: mergePdfPressed),
+                    onPressed: mergePdfPressed, child: const Text("merge pdf")),
                 iconRequestStatus(mergeStatus, "Pdf Merge Status")
               ])
             ])));
@@ -300,15 +300,16 @@ Widget iconRequestStatus(RequestStatus reqStatus, String tooltip) {
     case RequestStatus.SUCCESS:
       return Tooltip(
           message: tooltip,
-          child: Icon(Icons.check_rounded, color: Colors.green));
+          child: const Icon(Icons.check_rounded, color: Colors.green));
     case RequestStatus.FAIL:
       return Tooltip(
           message: tooltip,
-          child: Icon(Icons.error_outline, color: Colors.red));
+          child: const Icon(Icons.error_outline, color: Colors.red));
     default:
       return Tooltip(
           message: tooltip,
-          child: Icon(Icons.change_circle_outlined, color: Colors.transparent));
+          child: const Icon(Icons.change_circle_outlined,
+              color: Colors.transparent));
   }
 }
 

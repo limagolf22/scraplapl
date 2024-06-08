@@ -3,9 +3,9 @@ import 'package:logger/logger.dart';
 import 'package:scraplapl/main.dart';
 import 'package:scraplapl/tools.dart';
 
-void open_login_dialog(BuildContext context) {
-  Logger logger_dialog = Logger();
-  String internal_login = personalFolder;
+void openLoginDialog(BuildContext context) {
+  Logger loggerDialog = Logger();
+  String internalLogin = personalFolder;
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -25,7 +25,7 @@ void open_login_dialog(BuildContext context) {
                       icon: Icon(Icons.account_box),
                     ),
                     onChanged: (value) {
-                      internal_login = value;
+                      internalLogin = value;
                     }),
               ],
             ),
@@ -35,8 +35,8 @@ void open_login_dialog(BuildContext context) {
           ElevatedButton(
             child: const Text("submit"),
             onPressed: () {
-              personalFolder = internal_login;
-              logger_dialog.i("internal folder changed: " + personalFolder);
+              personalFolder = internalLogin;
+              loggerDialog.i("internal folder changed: $personalFolder");
               Navigator.of(context, rootNavigator: true).pop();
             },
           ),

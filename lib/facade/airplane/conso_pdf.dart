@@ -34,7 +34,7 @@ createConsoPDF(List<String> arpts) async {
                             addPadding(pw.Text(
                               consoContent[h].toString(),
                               maxLines: 1,
-                              style: pw.TextStyle(fontSize: 10),
+                              style: const pw.TextStyle(fontSize: 10),
                             ))
                           ]))
                       .toList() +

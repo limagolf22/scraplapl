@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_brace_in_string_interps
+// ignore_for_file: unnecessary_brace_in_string_interps, avoid_print
 
 import 'dart:io';
 import 'package:logger/logger.dart';
@@ -54,7 +54,7 @@ Future<String> getPdfNotam(
   //   print(element.value);
   // }
 
-  var map = new Map<String, String>();
+  var map = <String, String>{};
 
   map['bResultat'] = "true";
   map["bImpression"] = "";
@@ -171,14 +171,14 @@ Future<int> getPdfNotamSofiaRoute(
     List<String> airports, String date, String heure) async {
   http.Response res1 = await http.get(Uri.parse(
       'https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/homepage.html'));
-  String? JSId = res1.headers['set-cookie']?.split(';')[0];
+  String? jsId = res1.headers['set-cookie']?.split(';')[0];
 
   Map<String, String> headers2 = {
     'Accept': 'application/json, text/javascript, */*; q=0.01',
     'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
     'Connection': 'keep-alive',
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    'Cookie': JSId!,
+    'Cookie': jsId!,
     'Origin': 'https://sofia-briefing.aviation-civile.gouv.fr',
     'Referer':
         'https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/notamform.html',
@@ -200,7 +200,7 @@ Future<int> getPdfNotamSofiaRoute(
 
   http.Response res2 = await http.post(url, headers: headers2, body: data);
 
-  RegExp reg1 = new RegExp(r'(?<="id\\":\\")\d+(?=\\")');
+  RegExp reg1 = RegExp(r'(?<="id\\":\\")\d+(?=\\")');
 
   Iterable<RegExpMatch> allMatches = reg1.allMatches(res2.body);
 
@@ -211,7 +211,7 @@ Future<int> getPdfNotamSofiaRoute(
     'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
     'Connection': 'keep-alive',
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    'Cookie': JSId,
+    'Cookie': jsId,
     'Origin': 'https://sofia-briefing.aviation-civile.gouv.fr',
     'Referer':
         'https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/notamroute.html',
@@ -228,8 +228,8 @@ Future<int> getPdfNotamSofiaRoute(
     'Accept-Encoding': 'gzip',
   };
 
-  String dataPdf = idList.map((e) => "selected[]=$e&").join() +
-      'adep=${airports[0]}&ades=${airports[1]}&radius=30&corridor=15&fl_lower=0&fl_upper=999&title=prepa_roadnotam&duration=1200&validFrom=${date.replaceAll('/', '-')}T${heure}:07Z&uuid=780fdd10-268d-4f2a-8b40-b75abef431de780fdd10-268d-4f2a-8b40-b75abef431de&isFromSofia=true&:operation=NarrowRoutePibPdf';
+  String dataPdf =
+      '${idList.map((e) => "selected[]=$e&").join()}adep=${airports[0]}&ades=${airports[1]}&radius=30&corridor=15&fl_lower=0&fl_upper=999&title=prepa_roadnotam&duration=1200&validFrom=${date.replaceAll('/', '-')}T${heure}:07Z&uuid=780fdd10-268d-4f2a-8b40-b75abef431de780fdd10-268d-4f2a-8b40-b75abef431de&isFromSofia=true&:operation=NarrowRoutePibPdf';
   Uri urlPdf = Uri.parse(
       'https://sofia-briefing.aviation-civile.gouv.fr/content/sofia/NarrowRoutePibPdf');
   http.Response resPdf =

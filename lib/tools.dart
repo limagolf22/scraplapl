@@ -5,38 +5,38 @@ import 'package:path_provider/path_provider.dart';
 import 'package:scraplapl/main.dart';
 
 class AppUtil {
-  static Logger logger = new Logger();
+  static Logger logger = Logger();
   static Future<String> createFolderInAppDocDir(String folderName) async {
     //Get this App Document Directory
-    final Directory _appDocDir = await getApplicationDocumentsDirectory();
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
     //App Document Directory + folder name
-    final String relPath = (await createPersonalFolder(_appDocDir.path));
-    final Directory _appDocDirFolder = Directory(
-        relPath + (relPath.endsWith("/") ? "$folderName" : "/$folderName"));
+    final String relPath = (await createPersonalFolder(appDocDir.path));
+    final Directory appDocDirFolder = Directory(
+        relPath + (relPath.endsWith("/") ? folderName : "/$folderName"));
 
-    if (await _appDocDirFolder.exists()) {
+    if (await appDocDirFolder.exists()) {
       //if folder already exists return path
-      return _appDocDirFolder.path;
+      return appDocDirFolder.path;
     } else {
       //if folder not exists create folder and then return its path
-      final Directory _appDocDirNewFolder =
-          await _appDocDirFolder.create(recursive: true);
-      return _appDocDirNewFolder.path;
+      final Directory appDocDirNewFolder =
+          await appDocDirFolder.create(recursive: true);
+      return appDocDirNewFolder.path;
     }
   }
 
   static Future<String> createPersonalFolder(String root) async {
-    final Directory _appDocDirFolder = Directory('${root}/$personalFolder/');
+    final Directory appDocDirFolder = Directory('$root/$personalFolder/');
 
-    if (await _appDocDirFolder.exists()) {
+    if (await appDocDirFolder.exists()) {
       //if folder already exists return path
-      final Directory _appDocDirFolder = Directory('${root}/$personalFolder/');
-      return _appDocDirFolder.path;
+      final Directory appDocDirFolder = Directory('$root/$personalFolder/');
+      return appDocDirFolder.path;
     } else {
       //if folder not exists create folder and then return its path
-      final Directory _appDocDirNewFolder =
-          await _appDocDirFolder.create(recursive: true);
-      return _appDocDirNewFolder.path;
+      final Directory appDocDirNewFolder =
+          await appDocDirFolder.create(recursive: true);
+      return appDocDirNewFolder.path;
     }
   }
 
@@ -44,8 +44,8 @@ class AppUtil {
 
   static Future<String?> getExtDir() async {
     var directory = await getExternalStorageDirectory();
-    logger.d("External storage dir : " +
-        (directory != null ? directory.path : "Storage unavailable"));
+    logger.d(
+        "External storage dir : ${directory != null ? directory.path : "Storage unavailable"}");
     return directory?.path;
   }
 

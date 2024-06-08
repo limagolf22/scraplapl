@@ -4,7 +4,7 @@ import 'package:scraplapl/kernel/airplane/perfo.dart';
 import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/main.dart';
 import 'package:scraplapl/ui/formatter.dart';
-import 'package:scraplapl/ui/perfo/ResizableImage.dart';
+import 'package:scraplapl/ui/perfo/resizable_image.dart';
 
 class PerfoPage extends StatelessWidget {
   const PerfoPage({super.key});
@@ -50,7 +50,7 @@ Widget perfoFormWidget(int i) {
           airportsPerfs[i] = value;
         },
         controller: TextEditingController()..text = airportsPerfs[i],
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
             labelText: "Airport", constraints: BoxConstraints(maxWidth: 100))),
     Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,7 +67,7 @@ Widget perfoFormWidget(int i) {
                       ..text = (perfsInputs[i][h]).toString(),
                     decoration: InputDecoration(
                         labelText: h,
-                        constraints: BoxConstraints(maxWidth: 100))))
+                        constraints: const BoxConstraints(maxWidth: 100))))
                 .toList()),
         Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Column(
@@ -82,7 +82,7 @@ Widget perfoFormWidget(int i) {
                     ..text = (perfsResults[i]["TOD"]).toString(),
                   decoration: InputDecoration(
                       labelText: "TOD",
-                      constraints: BoxConstraints(maxWidth: 100),
+                      constraints: const BoxConstraints(maxWidth: 100),
                       filled: true,
                       fillColor: Colors.lightBlueAccent.shade100)),
               TextFormField(
@@ -95,7 +95,7 @@ Widget perfoFormWidget(int i) {
                     ..text = (perfsResults[i]["TODA"]).toString(),
                   decoration: InputDecoration(
                       labelText: "TODA",
-                      constraints: BoxConstraints(maxWidth: 100),
+                      constraints: const BoxConstraints(maxWidth: 100),
                       filled: true,
                       fillColor: Colors.lightBlue.shade100))
             ],
@@ -112,7 +112,7 @@ Widget perfoFormWidget(int i) {
                     ..text = (perfsResults[i]["LD"]).toString(),
                   decoration: InputDecoration(
                       labelText: "LD",
-                      constraints: BoxConstraints(maxWidth: 100),
+                      constraints: const BoxConstraints(maxWidth: 100),
                       filled: true,
                       fillColor: Colors.lightGreenAccent.shade100)),
               TextFormField(
@@ -125,7 +125,7 @@ Widget perfoFormWidget(int i) {
                     ..text = (perfsResults[i]["LDA"]).toString(),
                   decoration: InputDecoration(
                       labelText: "LDA",
-                      constraints: BoxConstraints(maxWidth: 100),
+                      constraints: const BoxConstraints(maxWidth: 100),
                       filled: true,
                       fillColor: Colors.lightGreen.shade100))
             ],

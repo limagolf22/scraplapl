@@ -42,12 +42,11 @@ Future<int> mergeAllPdfsWindows(
       ] +
       supAips.map((sa) => "$dir/SupAip_${adaptSupAipId(sa)}.pdf").toList()) {
     if (File(p).existsSync()) {
-      mergeLogger.d("path exists : " + p);
+      mergeLogger.d("path exists : $p");
       selectedPDFs.add(p);
     } else {
-      mergeLogger.d("path does not exist : " + p);
+      mergeLogger.d("path does not exist : $p");
     }
-    ;
   }
   ProcessRunner processRunner = ProcessRunner();
   ProcessRunnerResult result = await processRunner.runProcess(
@@ -79,7 +78,7 @@ Future<int> mergeAllPdfsAndroid(
       .followedBy(pdfDownloadsSupAip.entries)
       .where((entry) => entry.value.isNotEmpty)
       .forEach((entry) {
-    mergeLogger.d("pdf bytes exists : " + entry.key);
+    mergeLogger.d("pdf bytes exists : ${entry.key}");
     selectedPDFs.add(entry.value);
   });
   /*
