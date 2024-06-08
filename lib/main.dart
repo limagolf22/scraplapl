@@ -221,7 +221,7 @@ class _MainRouteState extends State<MainRoute> {
                         "${add0(date.hour)}:${add0(date.minute)}");
 
                     Future<int> exitCodeWeather =
-                        getPdfWeather(depArpt, arrArpt, 40);
+                        getPdfWeatherSofia(depArpt, arrArpt, date);
 
                     Future<int> exitCodeAzba =
                         scrapPdfAllAzba(depArpt, arrArpt);

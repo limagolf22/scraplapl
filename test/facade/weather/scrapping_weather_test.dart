@@ -1,5 +1,3 @@
-import 'package:scraplapl/facade/weather/weather_pdf.dart';
-import 'package:scraplapl/kernel/store/stores.dart';
 import 'package:scraplapl/facade/weather/weather_scrapping.dart';
 import 'package:test/test.dart';
 
@@ -10,7 +8,6 @@ void main() {
     test('test Weather function', () async {
       var date = DateTime.now().toUtc().add(const Duration(minutes: 5));
       int value = await getPdfWeatherSofia("LFBO", "LFDG", date);
-      await fileSaveWeatherPdf("LFBO", "LFDG", pdfDownloads['Weather']!);
       expect(value, equals(0));
     }, skip: isServerUnavailable);
   });
