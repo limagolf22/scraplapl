@@ -1,1 +1,1 @@
-bool isServerUnavailable = false;
+bool isServerUnavailable = true;
