@@ -82,11 +82,11 @@ void main() {
                   [LatLng(48.010278, 5.878056), LatLng(48.089444, 5.701389)],
                   [
                     DateTimeRange(
-                        start: DateTime(2023, 12, 8, 8, 29).toUtc(),
-                        end: DateTime(2023, 12, 12, 8, 29).toUtc()),
+                        start: DateTime.utc(2023, 12, 8, 7, 29),
+                        end: DateTime.utc(2023, 12, 12, 7, 29)),
                     DateTimeRange(
-                        start: DateTime(2023, 12, 20, 8, 29).toUtc(),
-                        end: DateTime(2023, 12, 22, 8, 29).toUtc())
+                        start: DateTime.utc(2023, 12, 20, 7, 29),
+                        end: DateTime.utc(2023, 12, 22, 7, 29))
                   ],
                   "Administrator : CDPGE Athis-Mons.#Avoidance mandatory during activation hours.")
               .toString()));
