@@ -56,7 +56,10 @@ class _FuelPageState extends State<FuelPage> {
                                             consoContent[h] = value == ""
                                                 ? 0
                                                 : int.parse(value);
-                                          } on FormatException {}
+                                          } on FormatException {
+                                            logger.w(
+                                                "$value is not a valid consumption value");
+                                          }
                                           setState(() {
                                             totalFuel = consoContent.values
                                                 .reduce((a, b) => (a + b));
@@ -67,7 +70,7 @@ class _FuelPageState extends State<FuelPage> {
                       [
                         TableRow(children: [
                           createCell(const Center(
-                              child: const Text(
+                              child: Text(
                             "TOTAL",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ))),
@@ -90,7 +93,7 @@ class _FuelPageState extends State<FuelPage> {
                       },
                       child: const Text(
                         "Valider",
-                        style: const TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16),
                       )))
             ],
           ),

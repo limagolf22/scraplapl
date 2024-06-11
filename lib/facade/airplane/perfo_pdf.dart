@@ -56,7 +56,7 @@ createPerfoPDF(List<String> arpts) async {
                                   perfsInputs[row][col].toString(),
                                   textAlign: pw.TextAlign.center,
                                   maxLines: 1,
-                                  style: pw.TextStyle(
+                                  style: const pw.TextStyle(
                                       background: pw.BoxDecoration(
                                           color: PdfColors.white))));
                             }).toList() +

@@ -5,6 +5,8 @@ import 'package:scraplapl/facade/supaip/supaip_parsing.dart';
 import 'package:scraplapl/kernel/supaip/supaip_model.dart';
 import 'package:test/test.dart';
 
+import '../../test_config.dart';
+
 void main() {
   group('test SupAip parser', () {
     test('test Supaip parser function', () async {
@@ -95,9 +97,9 @@ void main() {
                   "https://www.sia.aviation-civile.gouv.fr/documents/download/f/d/12550723/")
               .toString()));
     });
-    test('test Supaip parser function', () async {
+    test('test Supaip scrapper function', () async {
       var now = DateTime.now();
       expect(await scrapSupAips(now, "LFBB"), equals(0));
-    });
+    }, skip: isServerUnavailable);
   });
 }

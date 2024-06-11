@@ -27,9 +27,8 @@ LatLng parseLatLng(dynamic json) {
 
   double latDec = double.parse(lat.substring(0, 2)) +
       double.parse(lat.substring(2, 4)) / 60 +
-      double.parse(lat.substring(4, 6) +
-              '.' +
-              (lat.contains('.') ? lat.substring(7, 9) : "0")) /
+      double.parse(
+              '${lat.substring(4, 6)}.${lat.contains('.') ? lat.substring(7, 9) : "0"}') /
           3600;
   latDec *= lat.contains('N') ? 1 : -1;
 
@@ -37,9 +36,8 @@ LatLng parseLatLng(dynamic json) {
 
   double lonDec = double.parse(lon.substring(0, 3)) +
       double.parse(lon.substring(3, 5)) / 60 +
-      double.parse(lon.substring(5, 7) +
-              '.' +
-              (lon.contains('.') ? lon.substring(8, 10) : "0")) /
+      double.parse(
+              '${lon.substring(5, 7)}.${lon.contains('.') ? lon.substring(8, 10) : "0"}') /
           3600;
   lonDec *= lon.contains('E') ? 1 : -1;
   return LatLng(latDec, lonDec);

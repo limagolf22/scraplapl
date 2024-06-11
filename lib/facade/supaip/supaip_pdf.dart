@@ -24,9 +24,9 @@ Future<int> downloadSupAipPdfs(List<SupAip> supaips) async {
 }
 
 Future<void> fileSaveSupAipPdfs() async {
-  pdfDownloadsSupAip.entries.forEach((entry) {
+  for (var entry in pdfDownloadsSupAip.entries) {
     fileSaveSupAipPdf(entry.key, entry.value);
-  });
+  }
 }
 
 Future<int> fileSaveSupAipPdf(String id, Uint8List pdfBytes) async {

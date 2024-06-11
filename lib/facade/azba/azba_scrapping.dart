@@ -16,7 +16,7 @@ Future<int> scrapPdfAllAzba(String dep, String arr) async {
     loggerAzba.w("Failed to get Azba secret code");
     return 1;
   }
-  loggerAzba.d("secret code found : " + secretCode);
+  loggerAzba.d("secret code found : $secretCode");
 
   String? formatedDateLastMonth = await scrapDate(secretCode);
   if (formatedDateLastMonth == null) {
@@ -27,7 +27,7 @@ Future<int> scrapPdfAllAzba(String dep, String arr) async {
   String data = "?date=$formatedDateLastMonth&page=1&itemsPerPage=800";
 
   String urlStr =
-      'https://bo-prod-sofia-vac.sia-france.fr/api/v2/r_t_b_as' + data;
+      'https://bo-prod-sofia-vac.sia-france.fr/api/v2/r_t_b_as$data';
 
   String auth = generateAuth(secretCode, urlStr, "");
   var headers = {
@@ -43,7 +43,7 @@ Future<int> scrapPdfAllAzba(String dep, String arr) async {
   var res = await http.get(url, headers: headers);
 
   if (!res.success) {
-    loggerAzba.w("Failed to get Azba content : " + res.body);
+    loggerAzba.w("Failed to get Azba content : ${res.body}");
     return 1;
   }
   var resultJson = res.json();
@@ -85,18 +85,14 @@ Future<String?> scrapSecretCode() async {
   return null;
 }
 
-String generateAuth(String share_secret, String urlWithParams, String body) {
-  String n = share_secret + "/api/" + urlWithParams.split("/api/")[1];
+String generateAuth(String shareSecret, String urlWithParams, String body) {
+  String n = "$shareSecret/api/${urlWithParams.split("/api/")[1]}";
   var tokenUri = toSha512(n);
   if (body == "") {
-    var jsonStr = '{"tokenUri":"' + tokenUri + '"}';
+    var jsonStr = '{"tokenUri":"$tokenUri"}';
     return base64.encode(utf8.encode(jsonStr));
   } else {
-    var jsonStr = '{"tokenUri":"' +
-        tokenUri +
-        '","tokenParams":"' +
-        toSha512(body) +
-        '"}';
+    var jsonStr = '{"tokenUri":"$tokenUri","tokenParams":"${toSha512(body)}"}';
     return base64.encode(utf8.encode(jsonStr));
   }
 }

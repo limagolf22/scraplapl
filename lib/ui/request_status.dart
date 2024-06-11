@@ -1,6 +1,3 @@
+// ignore_for_file: constant_identifier_names
 
-enum RequestStatus {
-  UNDONE,
-  SUCCESS,
-  FAIL
-}
+enum RequestStatus { UNDONE, SUCCESS, FAIL }

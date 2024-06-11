@@ -42,8 +42,9 @@ dependencies:
   polylabel: ^1.0.1
   html: ^0.15.4
   url_launcher: ^6.2.6
-  #pdf_merger:
-  #  path: ../../../projects/pdf_merger
+  http: ^0.13.6
+  crypto: ^3.0.3
+  pdf_merger: ^0.0.6
 
 dev_dependencies:
   test: ^1.21.0

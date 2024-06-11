@@ -2,6 +2,8 @@ import 'package:scraplapl/main.dart';
 import 'package:scraplapl/facade/notam/notam_scrapping.dart';
 import 'package:test/test.dart';
 
+import '../../test_config.dart';
+
 void main() {
   group('test Notam Sofia scrapping 1st phase', () {
     test('test Notam function', () async {
@@ -11,6 +13,6 @@ void main() {
           "${date.year}/${add0(date.month)}/${add0(date.day)}",
           "${add0(date.hour)}:${add0(date.minute)}");
       expect(value, equals(0));
-    }, skip: true);
+    }, skip: isServerUnavailable);
   });
 }
