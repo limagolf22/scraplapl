@@ -62,7 +62,20 @@ jobs:
         run: flutter pub get
       
       - name: Run tests
-        run: flutter test --machine -r json
+        run: flutter test --machine -r json > test-results.json
+
+      - name: publish test artifacts
+        uses: actions/upload-artifact@v4
+        with: 
+          name: test-results
+          path: test-results.json
+      
+      - name: Display test report
+        uses: dorny/test-reporter@v1
+        with:
+          name: JUnit Report
+          path: test-results.json
+          reporter: flutter-json
 
   gen_binaries:
     runs-on: ubuntu-latest
