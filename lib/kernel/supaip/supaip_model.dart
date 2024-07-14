@@ -10,8 +10,7 @@ class SupAip {
   SupAip(this.id, this.fir, this.description, this.validity, this.link);
 
   bool isActive(DateTime instant) {
-    return !this.validity.start.isAfter(instant) &&
-        !this.validity.end.isBefore(instant);
+    return !validity.start.isAfter(instant) && !validity.end.isBefore(instant);
   }
 
   @override

@@ -1,6 +1,8 @@
 import 'package:scraplapl/facade/azba/azba_scrapping.dart';
 import 'package:test/test.dart';
 
+import '../../test_config.dart';
+
 void main() {
   group('test Azba scrapping 1st phase', () {
     test('test Id generator function', () async {
@@ -31,11 +33,11 @@ void main() {
           code,
           equals(
               "Y9Q3Ve72nN3PnTXmEtKnS4sggmdsigRMWH9kCDGHpCHyenFKKGhDq5vgBWZ4"));
-    });
+    }, skip: isServerUnavailable);
 
     test('test get all Azba test content', () async {
       int res = await scrapPdfAllAzba("LFXX", "LFXY");
       expect(res, equals(0));
-    });
+    }, skip: isServerUnavailable);
   });
 }

@@ -6,9 +6,9 @@ import 'package:scraplapl/main.dart';
 import 'package:scraplapl/ui/azba/azba_map.dart';
 import 'package:scraplapl/kernel/azba/azba_zone.dart';
 
-void changeAzbaZone(List<AzbaZone> _azbaZones) {
+void changeAzbaZone(List<AzbaZone> azbaZonesArg) {
   var now = DateTime.now();
-  azbaZones = _azbaZones;
+  azbaZones = azbaZonesArg;
   activationsTimes = [now] +
       azbaZones
           .map((az) => az.getActivationStarts().union(az.getActivationEnds()))
@@ -21,6 +21,8 @@ void changeAzbaZone(List<AzbaZone> _azbaZones) {
 }
 
 class AzbaPageWidget extends StatefulWidget {
+  const AzbaPageWidget({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _AzbaPageWidgetState();
@@ -42,14 +44,14 @@ class _AzbaPageWidgetState extends State<AzbaPageWidget> {
     var dateTime = activationsTimes.isNotEmpty
         ? activationsTimes[_forecastTime % activationsTimes.length]
         : dateTimeNow.add(Duration(hours: _forecastTime));
-    azbaPageLogger.i("build azba map with : " + dateTime.toIso8601String());
+    azbaPageLogger.i("build azba map with : ${dateTime.toIso8601String()}");
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('AZBA Map'),
-        actions: [
+        title: const Text('AZBA Map'),
+        actions: const [
           IconButton(
-            icon: const Icon(Icons.save),
+            icon: Icon(Icons.save),
             tooltip: 'save as pdf',
             onPressed: saveAzbaPdf,
           )
@@ -65,7 +67,7 @@ class _AzbaPageWidgetState extends State<AzbaPageWidget> {
               )),
           Text(
             frFormatDateTime(dateTime),
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           ElevatedButton(
               onPressed: increaseForecastTime,

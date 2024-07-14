@@ -7,12 +7,12 @@ import 'package:scraplapl/ui/azba/azba_utils.dart';
 import 'package:polylabel/polylabel.dart';
 import 'dart:math';
 
-const LAT45COEF = 0.707;
+const lat45Coef = 0.707;
 
 class AzbaMapWidget extends StatefulWidget {
   final DateTime dateTime;
 
-  AzbaMapWidget(this.dateTime);
+  const AzbaMapWidget(this.dateTime, {super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -27,18 +27,18 @@ class _AzbaMapWidgetState extends State<AzbaMapWidget> {
   Widget build(BuildContext context) {
     var parentSize = MediaQuery.of(context).size;
 
-    var widthSize = min(parentSize.height * LAT45COEF, parentSize.width);
+    var widthSize = min(parentSize.height * lat45Coef, parentSize.width);
 
     return Stack(
         children: [
       CustomPaint(
           painter: ContourPainter(franceContour),
-          size: Size(widthSize * 0.99, widthSize / LAT45COEF * 0.99))
+          size: Size(widthSize * 0.99, widthSize / lat45Coef * 0.99))
     ]
             .followedBy((azbaZones.map((az) => CustomPaint(
-                painter: PolygonPainter(az.type + ' ' + az.name, az.coordinates,
+                painter: PolygonPainter('${az.type} ${az.name}', az.coordinates,
                     az.isAzbaActive(widget.dateTime)),
-                size: Size(widthSize * 0.99, widthSize / LAT45COEF * 0.99)))))
+                size: Size(widthSize * 0.99, widthSize / lat45Coef * 0.99)))))
             .toList());
   }
 }
@@ -54,12 +54,12 @@ class PolygonPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var materialColor = (isActive ? Colors.red : Colors.blue);
     Paint paint = Paint()
-      ..color = materialColor.withOpacity(0.4) // Couleur du polygone
-      ..strokeWidth = 1 // Épaisseur de la bordure du polygone
+      ..color = materialColor.withOpacity(0.4)
+      ..strokeWidth = 1
       ..style = PaintingStyle.fill;
     Paint paintStroke = Paint()
-      ..color = materialColor.withOpacity(0.8) // Couleur du polygone
-      ..strokeWidth = 1 // Épaisseur de la bordure du polygone
+      ..color = materialColor.withOpacity(0.8)
+      ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
     List<Offset> offsets = [];
@@ -75,9 +75,9 @@ class PolygonPainter extends CustomPainter {
 
     TextPainter textPainterName = TextPainter(
         text: TextSpan(
-            text: this.name,
-            style:
-                TextStyle(color: Color.fromRGBO(26, 26, 26, 1), fontSize: 12)),
+            text: name,
+            style: const TextStyle(
+                color: Color.fromRGBO(26, 26, 26, 1), fontSize: 12)),
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.left);
     textPainterName.layout(
@@ -90,7 +90,7 @@ class PolygonPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(PolygonPainter oldDelegate) {
-    return this.isActive != oldDelegate.isActive;
+    return isActive != oldDelegate.isActive;
   }
 }
 
@@ -102,9 +102,8 @@ class ContourPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Color.fromARGB(255, 78, 78, 78)
-          .withOpacity(0.3) // Couleur du polygone
-      ..strokeWidth = 1 // Épaisseur de la bordure du polygone
+      ..color = const Color.fromARGB(255, 78, 78, 78).withOpacity(0.3)
+      ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
     List<Offset> offsets = [];
@@ -113,7 +112,6 @@ class ContourPainter extends CustomPainter {
       offsets.add(Offset(pt.x, pt.y));
     }
 
-    // Dessiner le polygone
     canvas.drawPath(Path()..addPolygon(offsets, true), paint);
   }
 

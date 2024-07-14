@@ -12,7 +12,7 @@ import 'package:scraplapl/ui/azba/azba_utils.dart';
 Future<void> fileSaveAzbaPDF(String dep, String arr) async {
   if (pdfDownloads['Azba'] != null && pdfDownloads['Azba']!.isNotEmpty) {
     var dir = await AppUtil.createFolderInAppDocDir('pdfs');
-    final file = File("$dir/Azba_${dep}-${arr}.pdf");
+    final file = File("$dir/Azba_$dep-$arr.pdf");
     await file.writeAsBytes(pdfDownloads['Azba']!);
   }
 }
@@ -51,7 +51,7 @@ saveAzbaPdf() async {
 
     var splitAzbas = azbaZones
         .where((az) => az.isAzbaActive(activationsTimes[i]))
-        .map((az) => MapEntry(az.type + ' ' + az.name, getCenterInPolygon(az)))
+        .map((az) => MapEntry('${az.type} ${az.name}', getCenterInPolygon(az)))
         .toList();
     splitAzbas
         .sort((a, b) => (a.value.y as double) > (b.value.y as double) ? 1 : -1);
@@ -120,8 +120,8 @@ pw.Widget generateAzbaAsPolygon(List<Point<double>> points, bool isActive) {
 
 pw.Widget generateAzbaName(String name, Point<num> point) {
   return pw.Container(
-    child:
-        pw.Text(name, style: pw.TextStyle(color: PdfColors.black, fontSize: 5)),
+    child: pw.Text(name,
+        style: const pw.TextStyle(color: PdfColors.black, fontSize: 5)),
     margin: pw.EdgeInsetsDirectional.only(
         start: point.x as double, top: point.y as double),
     height: 10.0,
