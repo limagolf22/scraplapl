@@ -17,11 +17,11 @@ Future<void> fileSaveAzbaPDF(String dep, String arr) async {
   }
 }
 
-saveAzbaPdf() async {
+Future<void> saveAzbaPdf() async {
   final pdf = pw.Document();
 
   pw.Widget widgetContour = generateFranceContour(franceContour
-      .map((pt) => latLngToPixPoint(pt, 500.0, 500.0 / 0.707))
+      .map((pt) => latLngToPixPoint(pt, 500.0, 500.0))
       .toList());
 
   List<List<pw.Widget>> widgets =
@@ -32,7 +32,7 @@ saveAzbaPdf() async {
         .where((az) => !az.isAzbaActive(activationsTimes[i]))
         .map((az) => generateAzbaAsPolygon(
             az.coordinates
-                .map((pt) => latLngToPixPoint(pt, 500.0, 500.0 / 0.707))
+                .map((pt) => latLngToPixPoint(pt, 500.0, 500.0))
                 .toList(),
             false)));
 
@@ -40,7 +40,7 @@ saveAzbaPdf() async {
         .where((az) => az.isAzbaActive(activationsTimes[i]))
         .map((az) => generateAzbaAsPolygon(
             az.coordinates
-                .map((pt) => latLngToPixPoint(pt, 500.0, 500.0 / 0.707))
+                .map((pt) => latLngToPixPoint(pt, 500.0, 500.0))
                 .toList(),
             true)));
 
@@ -78,7 +78,7 @@ saveAzbaPdf() async {
             pw.SizedBox(
                 child: pw.Stack(children: widgets[i]),
                 width: 501,
-                height: 501.0 / 0.707),
+                height: 501.0),
             pw.Text(activationsTimes[i].toString())
           ]);
         })); // Page
@@ -89,7 +89,7 @@ saveAzbaPdf() async {
 Point<num> getCenterInPolygon(AzbaZone azbaZone) {
   return polylabel([
     azbaZone.coordinates
-        .map((pt) => latLngToPixPoint(pt, 500.0, 500.0 / 0.707))
+        .map((pt) => latLngToPixPoint(pt, 500.0, 500.0))
         .toList()
   ]).point;
 }

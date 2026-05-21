@@ -49,6 +49,13 @@ class AppUtil {
     return directory?.path;
   }
 
+  static Future<List<String>?> getFilesInExtDir() async {
+    var directory = await getExternalStorageDirectory();
+    logger.d(
+        "External storage dir : ${directory != null ? directory.path : "Storage unavailable"}");
+    return directory?.list().where((f) => f.path.endsWith(".pdf")).map((f) => f.path).toList();
+  }
+
   static bool isICAO(String arpt) {
     return RegExp(r"^[A-Z]{4}$").hasMatch(arpt);
   }

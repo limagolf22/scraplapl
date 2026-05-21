@@ -15,19 +15,11 @@ Future<int> getPdfNotamSofia(
   String? jsId = res1.headers['set-cookie']?.split(';')[0];
   loggerNotam.d("JS id found : ${jsId!}");
   var headers = {
-    'sec-ch-ua':
-        '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
-    'sec-ch-ua-mobile': '?0',
-    'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     'Cookie': jsId,
     'Accept': 'application/json, text/javascript, */*; q=0.01',
     'Referer':
-        'https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/notamsearchaero.html',
-    'X-Requested-With': 'XMLHttpRequest',
-    'sec-ch-ua-platform': '"Windows"',
-    'Accept-Encoding': 'gzip',
+        'https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/notamsearchaero.html'
   };
 
   String data =
@@ -43,23 +35,15 @@ Future<int> getPdfNotamSofia(
   List<String> idList = allMatches.map((e) => e.group(0)!).toList();
 
   if (idList.isEmpty) {
-    loggerNotam.w("Failed to get Notam Ids");
+    loggerNotam.w("Failed to get Notam Ids"); //TODO: manage case where no notams are available
     return 1;
   }
 
   var headersPdf = {
-    'sec-ch-ua':
-        '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
-    'sec-ch-ua-mobile': '?0',
-    'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     'Accept': '*/*',
     'Referer':
         'https://sofia-briefing.aviation-civile.gouv.fr/sofia/pages/notamaero.html',
-    'X-Requested-With': 'XMLHttpRequest',
-    'sec-ch-ua-platform': '"Windows"',
-    'Accept-Encoding': 'gzip',
     'Cookie': jsId
   };
 

@@ -10,6 +10,7 @@ import 'package:scraplapl/facade/supaip/supaip_parsing.dart';
 import 'package:scraplapl/facade/supaip/supaip_pdf.dart';
 import 'package:scraplapl/facade/weather/weather_pdf.dart';
 import 'package:scraplapl/kernel/store/stores.dart';
+import 'package:scraplapl/main.dart';
 import 'package:scraplapl/tools.dart';
 import 'package:pdf_merger/pdf_merger.dart';
 
@@ -35,7 +36,7 @@ Future<int> mergeAllPdfsWindows(
   List<String> selectedPDFs = generateExistingPdfFileList(dir, dep, arr);
   ProcessRunner processRunner = ProcessRunner();
   ProcessRunnerResult result = await processRunner.runProcess(
-      ['./pdftk/pdftk.exe'] +
+      ['${Directory.current.path}\\pdftk\\pdftk.exe'] +
           selectedPDFs +
           ['cat', 'output', 'Merged_${targetedFolder}_$dep-$arr.pdf'],
       runInShell: false);
@@ -55,6 +56,7 @@ Future<int> mergeAllPdfsAndroid(
     mergeLogger.w("External Directory not available, failed to merge");
     return 1;
   }
+  extDirectory = extDir;
 
   mergeLogger.d("external directory found for merge : $extDir");
 

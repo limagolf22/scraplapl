@@ -69,6 +69,8 @@ int getFuelConso() {
       return 35;
     case "TB10":
       return 40;
+    case "C152":
+      return 25;
     default:
       return 0;
   }

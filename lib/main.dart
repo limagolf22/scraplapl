@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:scraplapl/facade/merge/merge_pdfs.dart';
 import 'package:scraplapl/ui/azba/azba_page.dart';
 import 'package:scraplapl/ui/formatter.dart';
+import 'package:scraplapl/ui/pdfvizu/pdfviewer.dart';
 import 'package:scraplapl/ui/request_status.dart';
 import 'package:scraplapl/facade/supaip/supaip_scrapping.dart';
 import 'package:scraplapl/ui/account/account_dialog.dart';
@@ -39,10 +40,12 @@ String arrArpt = "";
 String rerouting1 = "";
 String rerouting2 = "";
 
-const planeTypes = {"DR400-120", "DR400-140B", "TB10"};
+const planeTypes = {"DR400-120", "DR400-140B", "TB10", "C152"};
 String chosenAircraft = planeTypes.first;
 
 String personalFolder = "default";
+
+String extDirectory = "";
 
 Logger logger = Logger();
 
@@ -255,10 +258,29 @@ class _MainRouteState extends State<MainRoute> {
               ]),
               const SizedBox(height: 5),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                iconRequestStatus(mergeStatus, "Pdf Merge Status"),
                 ElevatedButton(
                     onPressed: mergePdfPressed, child: const Text("merge pdf")),
                 iconRequestStatus(mergeStatus, "Pdf Merge Status")
-              ])
+              ]),
+              const SizedBox(height: 5),
+              ElevatedButton(
+                  onPressed: () {
+                    // if (extDirectory != "") {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => PDFViewerScreen(
+                    //             "$extDirectory/Merged_${personalFolder}_$depArpt-$arrArpt.pdf")),
+                    //   );
+                    // }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PDFViewerScreen(
+                                "Merged_${personalFolder}_$depArpt-$arrArpt.pdf")));
+                  },
+                  child: const Text("Display PDF"))
             ])));
   }
 

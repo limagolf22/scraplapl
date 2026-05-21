@@ -13,8 +13,8 @@ Future<int> scrapPdfAllAzba(String dep, String arr) async {
 
   String? secretCode = await scrapSecretCode();
   if (secretCode == null) {
-    loggerAzba.w("Failed to get Azba secret code");
-    return 1;
+    loggerAzba.w("Failed to get Azba secret code, use default one.");
+    secretCode = "Y9Q3Ve72nN3PnTXmEtKnS4sggmdsigRMWH9kCDGHpCHyenFKKGhDq5vgBWZ4";
   }
   loggerAzba.d("secret code found : $secretCode");
 
@@ -77,7 +77,7 @@ Future<String?> scrapDate(String secretCode) async {
 
 Future<String?> scrapSecretCode() async {
   http.Response resJs = await http.get(Uri.parse(
-      'https://azba.sia-france.fr/main-es2015.69fe3091c43549df19b9.js'));
+      'https://www.sia.aviation-civile.gouv.fr/azbaEx/main-es2018.1c6b61117dac55ea1e57.js'));
   if (resJs.success) {
     RegExp exp = RegExp(r'share_secret:"([^"]+)"');
     return exp.firstMatch(resJs.body)?[1];

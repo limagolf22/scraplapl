@@ -27,19 +27,20 @@ class _AzbaMapWidgetState extends State<AzbaMapWidget> {
   Widget build(BuildContext context) {
     var parentSize = MediaQuery.of(context).size;
 
-    var widthSize = min(parentSize.height * lat45Coef, parentSize.width);
+    var widthSize = min(parentSize.height, parentSize.width);
 
-    return Stack(
+    return 
+    AspectRatio(aspectRatio: 1,child:Stack(
         children: [
       CustomPaint(
           painter: ContourPainter(franceContour),
-          size: Size(widthSize * 0.99, widthSize / lat45Coef * 0.99))
+          size: Size(widthSize * 0.99, widthSize * 0.99))
     ]
             .followedBy((azbaZones.map((az) => CustomPaint(
                 painter: PolygonPainter('${az.type} ${az.name}', az.coordinates,
                     az.isAzbaActive(widget.dateTime)),
-                size: Size(widthSize * 0.99, widthSize / lat45Coef * 0.99)))))
-            .toList());
+                size: Size(widthSize * 0.99, widthSize * 0.99)))))
+            .toList()));
   }
 }
 

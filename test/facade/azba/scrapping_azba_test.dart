@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:scraplapl/facade/azba/azba_scrapping.dart';
+import 'package:scraplapl/main.dart';
 import 'package:test/test.dart';
 
 import '../../test_config.dart';
 
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   group('test Azba scrapping 1st phase', () {
     test('test Id generator function', () async {
       String id = generateAuth(

@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:scraplapl/facade/weather/weather_scrapping.dart';
+import 'package:scraplapl/main.dart';
 import 'package:test/test.dart';
 
 import '../../test_config.dart';
 
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   group('test Weather Sofia scrapping 1st phase', () {
     test('test Weather function', () async {
       var date = DateTime.now().toUtc().add(const Duration(minutes: 5));
