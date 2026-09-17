@@ -93,7 +93,7 @@ List<String> generateExistingPdfFileList(String dir, String dep, String arr) {
         "$dir/Perfo_$dep-$arr.pdf"
       ] +
       supAips.map((sa) => "$dir/SupAip_${adaptSupAipId(sa)}.pdf").toList()) {
-    if (File(p).existsSync()) {
+    if (File(p).existsSync() && File(p).lengthSync()>0) {
       mergeLogger.d("path exists : $p");
       selectedPDFs.add(p);
     } else {
